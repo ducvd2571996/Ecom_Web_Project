@@ -10,6 +10,7 @@ import Services from '@/app/components/services';
 import FeaturedProducts from '@/app/components/featureProduct';
 import AdidasBanner from '@/app/components/adidasBanner';
 import { useRouter } from 'next/navigation';
+import { getCateListHanlder } from './store/reducers';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -18,10 +19,12 @@ export default function Home() {
     router.push('/product-list');
   };
 
-  const { data, loading } = useSelector((state: RootState) => state.user);
+  const { cateList, loading } = useSelector(
+    (state: RootState) => state.cateList
+  );
 
   useEffect(() => {
-    dispatch(fetchUserRequest());
+    dispatch(getCateListHanlder());
   }, [dispatch]);
   return (
     <Box>

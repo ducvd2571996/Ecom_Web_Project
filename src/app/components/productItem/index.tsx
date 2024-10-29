@@ -14,20 +14,19 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import VisibilityIcon from '@mui/icons-material/Visibility'; // Import the Visibility icon
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { formatPrice } from '@/helper/formatString/format-price';
 
 interface ProductItemProps {
   id: number;
   name: string;
-  oldPrice: string;
-  price: string;
-  discount: string;
+  price: number;
+  discount: number;
   imageUrl: string;
 }
 
 const ProductItem = ({
   id,
   name,
-  oldPrice,
   price,
   discount,
   imageUrl,
@@ -45,6 +44,8 @@ const ProductItem = ({
     router.push(url);
   };
 
+  const discountPrice = price - Math.round((price * discount) / 100);
+  const isHaveDiscount = discount && discount !== 0;
   return (
     <Grid item xs={12} sm={6} md={3} key={id}>
       <Card
@@ -76,24 +77,28 @@ const ProductItem = ({
             {name}
           </Typography>
           <Typography variant="body2" color="#40BFFF">
-            đ{price}
-            <Typography
-              color="#9098B1"
-              variant="body2"
-              component="span"
-              sx={{ textDecoration: 'line-through', marginLeft: 1 }}
-            >
-              đ{oldPrice}
-            </Typography>
-            <Typography
-              color="#FB7181"
-              variant="body2"
-              component="span"
-              fontWeight={'700'}
-              sx={{ marginLeft: 1 }}
-            >
-              ({discount})
-            </Typography>
+            đ{formatPrice(isHaveDiscount ? discountPrice : price)}
+            {isHaveDiscount ? (
+              <>
+                <Typography
+                  color="#9098B1"
+                  variant="body2"
+                  component="span"
+                  sx={{ textDecoration: 'line-through', marginLeft: 1 }}
+                >
+                  đ{formatPrice(price)}
+                </Typography>
+                <Typography
+                  color="#FB7181"
+                  variant="body2"
+                  component="span"
+                  fontWeight={'700'}
+                  sx={{ marginLeft: 1 }}
+                >
+                  {discount}%Off
+                </Typography>
+              </>
+            ) : null}
           </Typography>
         </CardContent>
 

@@ -1,6 +1,7 @@
 import { all } from 'redux-saga/effects';
-import userSaga from './home-saga';
+import homeSaga from './home-saga';
+import productListSaga from '../product-list/store/sagas';
 
 export default function* rootSaga() {
-  yield all([userSaga()]);
+  yield all([homeSaga(), productListSaga()]);
 }
