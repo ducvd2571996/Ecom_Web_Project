@@ -15,7 +15,8 @@ const productListSlice = createSlice({
   name: 'productList',
   initialState,
   reducers: {
-    getProductListHanlder: (state) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    getProductListHanlder: (state, action) => {
       state.loading = true;
     },
     getProductListSuccess: (state, action) => {

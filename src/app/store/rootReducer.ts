@@ -3,6 +3,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 import userReducer from './reducers/user';
 import cateListReducer from './reducers/get-cate-list';
 import productListReducer from '../product-list/store/reducers/get-product';
+import brandsReducer from '../product-list/store/reducers/get-brands';
 import latestProductReducer from './reducers/get-latest-product';
 
 const rootReducer = combineReducers({
@@ -10,6 +11,7 @@ const rootReducer = combineReducers({
   cateList: cateListReducer,
   productList: productListReducer,
   latestProduct: latestProductReducer,
+  brands: brandsReducer,
 });
 
 export default rootReducer;

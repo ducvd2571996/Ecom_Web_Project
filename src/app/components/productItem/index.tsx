@@ -22,6 +22,7 @@ interface ProductItemProps {
   price: number;
   discount: number;
   imageUrl: string;
+  length?: number;
 }
 
 const ProductItem = ({
@@ -46,6 +47,7 @@ const ProductItem = ({
 
   const discountPrice = price - Math.round((price * discount) / 100);
   const isHaveDiscount = discount && discount !== 0;
+
   return (
     <Grid item xs={12} sm={6} md={3} key={id}>
       <Card

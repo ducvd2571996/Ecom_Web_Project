@@ -7,4 +7,15 @@ export interface Product {
   tax: number;
   description: string;
   discount: number;
+  brand: number;
+}
+
+export interface GetProductListPayload {
+  maxResultCount?: number;
+  categoryId?: number;
+  brand?: number;
+  minPrice?: number;
+  maxPrice?: number;
+  skipCount?: number;
+  keyword?: string;
 }

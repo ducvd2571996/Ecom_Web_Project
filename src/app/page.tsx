@@ -1,16 +1,15 @@
 'use client'; // This makes the component a Client Component
-import Banner from '@/app/components/banner/Banner';
-import { Box, Typography } from '@mui/material';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserRequest } from './store/reducers/user';
-import { RootState } from './store/store';
-import BestSeller from '@/app/components/bestSeller';
-import Services from '@/app/components/services';
-import FeaturedProducts from '@/app/components/featureProduct';
 import AdidasBanner from '@/app/components/adidasBanner';
+import Banner from '@/app/components/banner/Banner';
+import BestSeller from '@/app/components/bestSeller';
+import FeaturedProducts from '@/app/components/featureProduct';
+import Services from '@/app/components/services';
+import { Box, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { getCateListHanlder } from './store/reducers';
+import { getBrandsHanlder } from './product-list/store/reducers/get-brands';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -19,13 +18,11 @@ export default function Home() {
     router.push('/product-list');
   };
 
-  const { cateList, loading } = useSelector(
-    (state: RootState) => state.cateList
-  );
-
   useEffect(() => {
     dispatch(getCateListHanlder());
+    dispatch(getBrandsHanlder());
   }, [dispatch]);
+
   return (
     <Box>
       <Banner />

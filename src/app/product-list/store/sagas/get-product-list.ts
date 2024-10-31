@@ -5,7 +5,7 @@ import {
   getProductListSuccess,
 } from '../reducers/get-product';
 import axios from 'axios';
-import { Product } from '../../../model';
+import { GetProductListPayload, Product } from '../../../model';
 
 interface ProductListData {
   items: Array<Product>;
@@ -17,14 +17,24 @@ interface DataType {
   message: string;
 }
 
-const fetchProductsApi = async () => {
-  const response = await axios.get('http://127.0.0.1:3002/products');
+interface ActionType {
+  type: string;
+  payload: GetProductListPayload;
+}
+
+const fetchProductsApi = async (payload: GetProductListPayload) => {
+  const response = await axios.get('http://127.0.0.1:3002/products', {
+    params: payload, // Axios will automatically serialize this as query parameters
+  });
+
   return response.data; // Assuming data contains the product list
 };
 
-function* getProductListSaga(): Generator<any, void, DataType> {
+function* getProductListSaga(
+  action: ActionType
+): Generator<any, void, DataType> {
   try {
-    const rs = yield call(fetchProductsApi);
+    const rs = yield call(fetchProductsApi, action?.payload);
     if (rs?.status === 200) {
       yield put(getProductListSuccess(rs?.data?.items));
     } else {

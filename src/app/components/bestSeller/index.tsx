@@ -27,7 +27,7 @@ const BestSeller = () => {
   const { productList } = useSelector((state: RootState) => state.productList);
 
   useEffect(() => {
-    dispatch(getProductListHanlder());
+    dispatch(getProductListHanlder({}));
   }, [dispatch]);
 
   // Filter products based on the selected category

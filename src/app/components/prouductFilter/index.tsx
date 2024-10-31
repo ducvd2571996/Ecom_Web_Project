@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Slider,
@@ -9,16 +9,29 @@ import {
   ListItemText,
   Link,
 } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/app/store/store';
+import { getCateListHanlder } from '@/app/store/reducers';
+import { getBrandsHanlder } from '@/app/product-list/store/reducers/get-brands';
+import { getProductListHanlder } from '@/app/product-list/store/reducers/get-product';
 
 const ProductFilter: React.FC = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000000]);
-  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-
+  const [selectedBrand, setSelectedBrand] = useState<number | null>(null);
+  const [selectedCate, setSelectedCate] = useState<number | null>(null);
+  const dispatch = useDispatch();
   const handlePriceChange = (event: Event, newValue: number | number[]) => {
     setPriceRange(newValue as [number, number]);
   };
 
-  const brands = ['Nike', 'Adidas', 'Siemens'];
+  useEffect(() => {
+    dispatch(getCateListHanlder());
+    dispatch(getBrandsHanlder());
+  }, []);
+
+  const { cateList } = useSelector((state: RootState) => state.cateList);
+
+  const { brands } = useSelector((state: RootState) => state.brands);
 
   return (
     <Box sx={{ paddingX: 2 }}>
@@ -53,20 +66,58 @@ const ProductFilter: React.FC = () => {
                   <Link
                     href="#"
                     underline="none"
-                    color={selectedBrand === brand ? 'primary' : 'inherit'}
-                    onClick={() => setSelectedBrand(brand)}
+                    color={selectedBrand === brand.id ? 'primary' : 'inherit'}
+                    onClick={() => {
+                      dispatch(getProductListHanlder({ brand: brand?.id }));
+                      setSelectedBrand(brand.id);
+                    }}
                     sx={{
-                      fontWeight: selectedBrand === brand ? 'bold' : 'normal',
+                      fontWeight:
+                        selectedBrand === brand.id ? 'bold' : 'normal',
                     }}
                   >
-                    {brand}
+                    {brand.name}
                   </Link>
                 }
               />
               <Typography
-                color={selectedBrand === brand ? 'primary' : 'text.secondary'}
+                color={
+                  selectedBrand === brand.id ? 'primary' : 'text.secondary'
+                }
               >
-                99
+                {brand?.productCount}
+              </Typography>
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
+
+      <Paper sx={{ padding: 2, backgroundColor: '#F6F7F8', marginTop: 3 }}>
+        <Typography variant="h6" gutterBottom>
+          Mặt hàng
+        </Typography>
+        <List>
+          {cateList.map((cate, index) => (
+            <ListItem key={index} disableGutters>
+              <ListItemText
+                primary={
+                  <Link
+                    href="#"
+                    underline="none"
+                    color={selectedCate === cate?.id ? 'primary' : 'inherit'}
+                    onClick={() => setSelectedCate(cate?.id)}
+                    sx={{
+                      fontWeight: selectedCate === cate?.id ? 'bold' : 'normal',
+                    }}
+                  >
+                    {cate?.name}
+                  </Link>
+                }
+              />
+              <Typography
+                color={selectedCate === cate?.id ? 'primary' : 'text.secondary'}
+              >
+                {cate?.productCount}
               </Typography>
             </ListItem>
           ))}

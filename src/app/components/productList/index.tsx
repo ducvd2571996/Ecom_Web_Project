@@ -14,7 +14,7 @@ const ProductList = () => {
   );
 
   useEffect(() => {
-    dispatch(getProductListHanlder());
+    dispatch(getProductListHanlder({}));
   }, [dispatch]);
 
   if (loading) return <p>Loading...</p>;
@@ -25,6 +25,7 @@ const ProductList = () => {
       <Grid container spacing={5}>
         {productList?.map?.((product) => (
           <ProductItem
+            length={productList?.length}
             key={product.id}
             id={product.id}
             name={product.name}
