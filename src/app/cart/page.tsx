@@ -17,7 +17,6 @@ import {
 } from '@mui/material';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
-import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { useRouter } from 'next/navigation';
 import WarningIcon from '@mui/icons-material/Warning';
@@ -81,8 +80,14 @@ const CartPage = () => {
 
   // Điều hướng đến trang thanh toán
   const handleCheckoutClick = () => {
-    router.push('/payment');
-  };
+    const query = new URLSearchParams({
+      quantities: JSON.stringify(quantities),
+      pricePerItem: pricePerItem.toString(),
+      shippingFee: shippingFee.toString(),
+      coupon: coupon.toString(),
+    }).toString();
+    router.push(`/payment?${query}`);
+};
 
   return (
     <Box sx={{ padding: '32px' }}>
