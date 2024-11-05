@@ -185,7 +185,7 @@ const CartPage = () => {
               sx={{ flexGrow: 1, marginRight: '16px' }}
             />
             <Button variant="contained" color="primary">
-              Redeem
+              Sử dụng
             </Button>
           </Box>
 
@@ -252,7 +252,6 @@ const CartPage = () => {
       </Box>
     </Box>
   );
-
 };
 
 export default CartPage;
