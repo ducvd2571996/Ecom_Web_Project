@@ -9,8 +9,8 @@ import {
   Select,
   Divider,
   IconButton,
+  CardMedia,
 } from '@mui/material';
-import Image from 'next/image'; // For optimized Next.js images
 import { useState } from 'react';
 import ProductContentTabs from '../components/contentTab';
 import { useSearchParams } from 'next/navigation';
@@ -43,25 +43,17 @@ const ProductDetailPage = () => {
     <Box>
       <Container sx={{ marginTop: 4 }}>
         <Grid container spacing={4}>
-          {/* Product Image */}
-          <Grid
-            item
-            xs={12}
-            md={6}
-            sx={{
-              alignItems: 'center',
-              display: 'flex',
-            }}
-          >
-            <Image
-              src={link || ''}
-              alt="Nike Airmax 270 React"
-              width={400} // Original width
-              height={400} // Original height
-              style={{ width: '95%', height: 'auto' }}
+          <Box sx={{ maxWidth: 500, margin: 5 }}>
+            <CardMedia
+              component="img"
+              sx={{
+                width: '100%',
+                height: 'auto',
+                objectFit: 'contain',
+              }}
+              image={link || ''}
             />
-          </Grid>
-
+          </Box>
           {/* Product Details */}
           <Grid item xs={12} md={6}>
             <Typography sx={{ fontWeight: 'bold' }} variant="h4">
