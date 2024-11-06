@@ -45,6 +45,11 @@ const ProductItem = ({
     router.push(url);
   };
 
+  const onNavigateLogin = () => {
+    const url = `/login`;
+    router.push(url);
+  };
+
   const discountPrice = price - Math.round((price * discount) / 100);
   const isHaveDiscount = discount && discount !== 0;
 
@@ -131,7 +136,7 @@ const ProductItem = ({
               </IconButton>
             </Tooltip>
             <Tooltip title="Thêm giỏ hàng">
-              <IconButton sx={{ color: '#40BFFF' }}>
+              <IconButton onClick={onNavigateLogin} sx={{ color: '#40BFFF' }}>
                 <ShoppingCartIcon />
               </IconButton>
             </Tooltip>

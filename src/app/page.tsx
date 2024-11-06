@@ -8,8 +8,8 @@ import { Box, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { getCateListHanlder } from './store/reducers';
 import { getBrandsHanlder } from './product-list/store/reducers/get-brands';
+import { fetchUserRequest, getCateListHanlder } from './store/reducers';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -17,6 +17,16 @@ export default function Home() {
   const gotoProductList = () => {
     router.push('/product-list');
   };
+
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    const user = userData ? JSON.parse(userData) : null;
+    console.log('userrr,', user);
+
+    if (user?.userInfo?.userId) {
+      dispatch(fetchUserRequest(user?.userInfo?.userId));
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(getCateListHanlder());

@@ -8,6 +8,7 @@ import theme from '../theme';
 import { Provider } from 'react-redux';
 import './globals.css';
 import store from './store/store';
+import { usePathname } from 'next/navigation';
 
 const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700'], // Include desired weights
@@ -21,15 +22,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const isLoginPage = pathname === '/login' || pathname === '/register';
   return (
     <html lang="en">
       <body className={poppins.variable}>
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeProvider theme={theme}>
             <Provider store={store}>
-              <Header />
+              {!isLoginPage && <Header />}
               <main>{children}</main>
-              <Footer /> {/* Footer will stay at the bottom */}
+              {!isLoginPage && <Footer />}
             </Provider>
           </ThemeProvider>
         </AppRouterCacheProvider>

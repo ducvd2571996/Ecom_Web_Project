@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -13,8 +13,15 @@ import {
   InputBase,
   Paper,
   Divider,
+  Menu,
+  MenuItem,
+  ListItemIcon,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useRouter } from 'next/navigation';
+import InfoIcon from '@mui/icons-material/Info';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -54,6 +61,22 @@ const Header: React.FC = () => {
   const [searchOpen, setSearchOpen] = useState(false); // State to toggle search bar visibility
   const [searchQuery, setSearchQuery] = useState(''); // State for the search query
   const [searchResults, setSearchResults] = useState<string[]>([]); // State for search results
+  const [user, setUser] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleProfileClick = () => {
+    // Navigate to profile details or perform profile-related actions
+    console.log('Profile clicked');
+    handleClose();
+  };
 
   // Sample data
   const items = [
@@ -68,8 +91,31 @@ const Header: React.FC = () => {
     'Raspberry',
   ];
 
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    const user = userData ? JSON.parse(userData) : null;
+    setUser(user?.userInfo);
+  }, []);
+
   const handleCartClick = () => {
     window.location.href = '/cart'; // Redirect to the cart page
+  };
+
+  const router = useRouter();
+
+  const gotoRegister = () => {
+    router.push('/register');
+  };
+
+  const gotoLogin = () => {
+    router.push('/login');
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    handleClose();
+    window.location.reload();
   };
 
   const handleSearchClick = () => {
@@ -135,18 +181,73 @@ const Header: React.FC = () => {
             },
           }}
         >
-          <IconButton>
-            <AccountCircleIcon />
-            <Typography
-              sx={{
-                marginLeft: 1,
-                fontWeight: 'bold',
-                display: { xs: 'none', sm: 'block' },
-              }}
-            >
-              Hồ sơ cá nhân
-            </Typography>
-          </IconButton>
+          {!user ? (
+            <Box display={'flex'}>
+              <Typography
+                onClick={gotoRegister}
+                component="a"
+                color="primary"
+                href="#"
+                fontWeight="bold"
+              >
+                Đăng Ký
+              </Typography>
+              <Typography
+                onClick={gotoLogin}
+                marginLeft={5}
+                component="a"
+                color="primary"
+                href="#"
+                fontWeight="bold"
+              >
+                Đăng nhập
+              </Typography>
+            </Box>
+          ) : (
+            <>
+              <IconButton onClick={handleOpen}>
+                <AccountCircleIcon />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+              >
+                <MenuItem onClick={handleProfileClick}>
+                  <ListItemIcon>
+                    <InfoIcon fontSize="small" />
+                  </ListItemIcon>
+                  Thông tin cá nhân
+                </MenuItem>
+                <MenuItem>
+                  <ListItemIcon>
+                    <FavoriteIcon fontSize="small" />
+                  </ListItemIcon>
+                  Sản phẩm yêu thích
+                </MenuItem>
+                {/* <MenuItem>
+                  <ListItemIcon>
+                    <ShoppingCartIcon fontSize="small" />
+                  </ListItemIcon>
+                  Đơn hàng
+                </MenuItem> */}
+                <MenuItem onClick={handleLogout}>
+                  <ListItemIcon>
+                    <LogoutIcon fontSize="small" />
+                  </ListItemIcon>
+                  Đăng xuất
+                </MenuItem>
+              </Menu>
+            </>
+          )}
 
           <IconButton onClick={handleCartClick}>
             <Badge badgeContent={2} color="secondary">
@@ -163,7 +264,7 @@ const Header: React.FC = () => {
           {searchOpen && (
             <Search>
               <SearchInput
-                placeholder="Search…"
+                placeholder="Tìm kiếm..."
                 inputProps={{ 'aria-label': 'search' }}
                 value={searchQuery}
                 onChange={handleSearchChange}
