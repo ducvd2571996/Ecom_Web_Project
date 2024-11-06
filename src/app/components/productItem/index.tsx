@@ -71,7 +71,7 @@ const ProductItem = ({
             component="img"
             sx={{
               width: '100%',
-              height: 'auto',
+              height: 100,
               objectFit: 'contain',
             }}
             image={imageUrl}
@@ -80,7 +80,17 @@ const ProductItem = ({
         </Box>
 
         <CardContent style={{ alignItems: 'center' }}>
-          <Typography gutterBottom variant="h6" component="div">
+          <Typography
+            gutterBottom
+            variant="h6"
+            component="div"
+            sx={{
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              WebkitLineClamp: 1,
+            }}
+          >
             {name}
           </Typography>
           <Typography variant="body2" color="#40BFFF">
