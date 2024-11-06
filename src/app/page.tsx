@@ -1,15 +1,15 @@
 'use client'; // This makes the component a Client Component
-import Banner from '@/app/components/banner/Banner';
-import { Box, Typography } from '@mui/material';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserRequest } from './store/reducers/user';
-import { RootState } from './store/store';
-import BestSeller from '@/app/components/bestSeller';
-import Services from '@/app/components/services';
-import FeaturedProducts from '@/app/components/featureProduct';
 import AdidasBanner from '@/app/components/adidasBanner';
+import Banner from '@/app/components/banner/Banner';
+import BestSeller from '@/app/components/bestSeller';
+import FeaturedProducts from '@/app/components/featureProduct';
+import Services from '@/app/components/services';
+import { Box, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { getBrandsHanlder } from './product-list/store/reducers/get-brands';
+import { fetchUserRequest, getCateListHanlder } from './store/reducers';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -18,11 +18,21 @@ export default function Home() {
     router.push('/product-list');
   };
 
-  const { data, loading } = useSelector((state: RootState) => state.user);
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    const user = userData ? JSON.parse(userData) : null;
+    console.log('userrr,', user);
+
+    if (user?.userInfo?.userId) {
+      dispatch(fetchUserRequest(user?.userInfo?.userId));
+    }
+  }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchUserRequest());
+    dispatch(getCateListHanlder());
+    dispatch(getBrandsHanlder());
   }, [dispatch]);
+
   return (
     <Box>
       <Banner />

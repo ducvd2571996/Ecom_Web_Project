@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import {
@@ -38,7 +38,7 @@ const CartPage = () => {
 
   // Hàm giảm số lượng cho một sản phẩm
   const handleDecrease = (index: number) => {
-    setQuantities(prev => {
+    setQuantities((prev) => {
       const newQuantities = [...prev];
       if (newQuantities[index] === 1) {
         // Nếu số lượng đã là 1, mở hộp thoại xác nhận xóa thay vì giảm thêm
@@ -53,7 +53,7 @@ const CartPage = () => {
 
   // Hàm tăng số lượng cho một sản phẩm
   const handleIncrease = (index: number) => {
-    setQuantities(prev => {
+    setQuantities((prev) => {
       const newQuantities = [...prev];
       newQuantities[index] += 1;
       return newQuantities;
@@ -87,36 +87,64 @@ const CartPage = () => {
       coupon: coupon.toString(),
     }).toString();
     router.push(`/payment?${query}`);
-};
+  };
 
   return (
     <Box sx={{ padding: '32px' }}>
-      <Box sx={{
-        display: 'grid',
-        gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, // Cấu trúc 2 cột cho màn hình lớn
-        gap: 5,
-      }}>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, // Cấu trúc 2 cột cho màn hình lớn
+          gap: 5,
+        }}
+      >
         {/* Left Column (2/3 width) */}
         <Box flex={2}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '16px', backgroundColor: '#f5f5f5' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              padding: '16px',
+              backgroundColor: '#f5f5f5',
+            }}
+          >
             <Box sx={{ flex: 2, display: 'flex', alignItems: 'center' }}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold', marginLeft: '35px' }}>Sản phẩm</Typography>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: 'bold', marginLeft: '35px' }}
+              >
+                Sản phẩm
+              </Typography>
             </Box>
             <Box sx={{ flex: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold', textAlign: 'center' }}>Đơn giá</Typography>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: 'bold', textAlign: 'center' }}
+              >
+                Đơn giá
+              </Typography>
             </Box>
             <Box sx={{ flex: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold', textAlign: 'center' }}>Số lượng</Typography>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: 'bold', textAlign: 'center' }}
+              >
+                Số lượng
+              </Typography>
             </Box>
             <Box sx={{ flex: 1 }}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold', textAlign: 'center' }}>Thành tiền</Typography>
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: 'bold', textAlign: 'center' }}
+              >
+                Thành tiền
+              </Typography>
             </Box>
           </Box>
           <Divider sx={{ my: 1 }} />
 
           {/* Cart Products */}
           <Stack spacing={4}>
-
             {/* Product 1 */}
             {quantities.map((qty, index) => (
               <Box
@@ -130,31 +158,56 @@ const CartPage = () => {
                   alignItems: 'center',
                 }}
               >
-
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <IconButton onClick={() => handleRemove(index)} sx={{ color: 'red', left: '-12px' }}>
+                  <IconButton
+                    onClick={() => handleRemove(index)}
+                    sx={{ color: 'red', left: '-12px' }}
+                  >
                     <CloseIcon />
                   </IconButton>
                   <img
-                    src={index === 0 ? "https://m.media-amazon.com/images/I/71lRy65QcdL._AC_SY695_.jpg" : "https://m.media-amazon.com/images/I/71i+rKxv6pL._AC_SY695_.jpg"}
+                    src={
+                      index === 0
+                        ? 'https://m.media-amazon.com/images/I/71lRy65QcdL._AC_SY695_.jpg'
+                        : 'https://m.media-amazon.com/images/I/71i+rKxv6pL._AC_SY695_.jpg'
+                    }
                     alt={`Product ${index + 1}`}
-                    style={{ width: '100px', height: 'auto', marginLeft: '-5px', marginRight: '16px' }}
+                    style={{
+                      width: '100px',
+                      height: 'auto',
+                      marginLeft: '-5px',
+                      marginRight: '16px',
+                    }}
                   />
-                  <Typography variant="h6">{index === 0 ? "Nike Airmax 270 React" : "Designer Bag"}</Typography>
+                  <Typography variant="h6">
+                    {index === 0 ? 'Nike Airmax 270 React' : 'Designer Bag'}
+                  </Typography>
                 </Box>
-                <Typography variant="body1" sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+                <Typography
+                  variant="body1"
+                  sx={{ fontWeight: 'bold', textAlign: 'center' }}
+                >
                   {pricePerItem.toLocaleString()} VND
                 </Typography>
                 <Box display="flex" alignItems="center">
-                  <IconButton onClick={() => handleDecrease(index)} sx={{ color: '#58c9f3' }}>
+                  <IconButton
+                    onClick={() => handleDecrease(index)}
+                    sx={{ color: '#58c9f3' }}
+                  >
                     <RemoveIcon />
                   </IconButton>
                   <Typography sx={{ margin: '0 16px' }}>{qty}</Typography>
-                  <IconButton onClick={() => handleIncrease(index)} sx={{ color: '#58c9f3' }}>
+                  <IconButton
+                    onClick={() => handleIncrease(index)}
+                    sx={{ color: '#58c9f3' }}
+                  >
                     <AddIcon />
                   </IconButton>
                 </Box>
-                <Typography variant="body1" sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+                <Typography
+                  variant="body1"
+                  sx={{ fontWeight: 'bold', textAlign: 'center' }}
+                >
                   {(pricePerItem * qty).toLocaleString()} VND
                 </Typography>
               </Box>
@@ -170,17 +223,27 @@ const CartPage = () => {
               </Box>
             </DialogTitle>
             <DialogContent>
-              <DialogContentText>Bạn có muốn xóa sản phẩm đang chọn?</DialogContentText>
+              <DialogContentText>
+                Bạn có muốn xóa sản phẩm đang chọn?
+              </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={confirmRemove} color="secondary">Xác nhận</Button>
-              <Button onClick={() => setOpenConfirm(false)} color="primary" autoFocus>Hủy</Button>
+              <Button onClick={confirmRemove} color="secondary">
+                Xác nhận
+              </Button>
+              <Button
+                onClick={() => setOpenConfirm(false)}
+                color="primary"
+                autoFocus
+              >
+                Hủy
+              </Button>
             </DialogActions>
           </Dialog>
         </Box>
 
         {/* Right Column (1/3 width) */}
-        <Box flex={1} marginTop='2px'>
+        <Box flex={1} marginTop="2px">
           {/* Voucher Code Section */}
           <Box display="flex" alignItems="center" marginBottom="32px">
             <TextField
@@ -205,7 +268,6 @@ const CartPage = () => {
               marginBottom: '16px',
             }}
           >
-
             <Box>
               <Typography variant="body1">Tổng tiền hàng</Typography>
               <br />
@@ -216,11 +278,17 @@ const CartPage = () => {
             <Divider />
 
             <Box>
-              <Typography variant="body1">{subtotal.toLocaleString()} VND</Typography>
+              <Typography variant="body1">
+                {subtotal.toLocaleString()} VND
+              </Typography>
               <br />
-              <Typography variant="body1">{shippingFee.toLocaleString()} VND</Typography>
+              <Typography variant="body1">
+                {shippingFee.toLocaleString()} VND
+              </Typography>
               <br />
-              <Typography variant="body1">{coupon > 0 ? `-${coupon.toLocaleString()}` : 'Không'}</Typography>
+              <Typography variant="body1">
+                {coupon > 0 ? `-${coupon.toLocaleString()}` : 'Không'}
+              </Typography>
             </Box>
           </Box>
           <Divider />
@@ -238,7 +306,6 @@ const CartPage = () => {
               marginBottom: '32px',
             }}
           >
-
             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
               Tổng thanh toán
             </Typography>
@@ -249,7 +316,12 @@ const CartPage = () => {
 
           {/* Checkout Button */}
           <Box textAlign="center">
-            <Button variant="contained" color="primary" sx={{ width: '100%' }} onClick={handleCheckoutClick}>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ width: '100%' }}
+              onClick={handleCheckoutClick}
+            >
               Mua hàng
             </Button>
           </Box>
