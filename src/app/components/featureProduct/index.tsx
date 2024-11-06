@@ -42,7 +42,16 @@ export default function FeaturedProducts() {
             alt={product.name}
           />
           <CardContent>
-            <Typography variant="subtitle1" gutterBottom>
+            <Typography
+              variant="subtitle1"
+              gutterBottom
+              sx={{
+                display: '-webkit-box',
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                WebkitLineClamp: 1,
+              }}
+            >
               {product.name}
             </Typography>
             <Box
