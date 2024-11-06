@@ -10,6 +10,7 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -18,18 +19,27 @@ export default function FeaturedProducts() {
     (state: RootState) => state.latestProduct
   );
   const dispatch = useDispatch();
+  const router = useRouter();
   useEffect(() => {
     dispatch(getLatestProductHanlder());
   }, [dispatch]);
 
+  const onNavigateDetail = (id: number) => {
+    const url = `/product-detail?id=${id}`;
+    router.push(url);
+  };
+
   const productItem = (product: Product) => {
-    const { price, discount } = product;
+    const { price, discount, productId } = product;
     const discountPrice = price - Math.round((price * discount) / 100);
     const isHaveDiscount = discount && discount !== 0;
 
     return (
-      <Grid item xs={12} sm={6} md={3} key={product.id}>
-        <Card sx={{ display: 'flex' }}>
+      <Grid item xs={12} sm={6} md={3} key={product.productId}>
+        <Card
+          onClick={() => onNavigateDetail(productId)}
+          sx={{ display: 'flex' }}
+        >
           <CardMedia
             component="img"
             sx={{

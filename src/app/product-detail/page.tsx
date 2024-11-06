@@ -11,11 +11,15 @@ import {
   IconButton,
   CardMedia,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProductContentTabs from '../components/contentTab';
 import { useSearchParams } from 'next/navigation';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProductDetailHanlder } from './store/reducers/get-product-detail';
+import { RootState } from '../store/store';
+import { formatPrice } from '@/helper/formatString/format-price';
 
 const ProductDetailPage = () => {
   const [size, setSize] = useState('XS');
@@ -24,7 +28,17 @@ const ProductDetailPage = () => {
 
   const searchParams = useSearchParams();
 
-  const link = searchParams.get('link'); // Get the 'link' query parameter
+  const id = searchParams.get('id'); // Get the 'id' query parameter
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getProductDetailHanlder(id));
+  }, []);
+
+  const { productDetail } = useSelector(
+    (state: RootState) => state.productDetail
+  );
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSizeChange = (event: any) => {
@@ -39,6 +53,11 @@ const ProductDetailPage = () => {
     setIsFavorite((prev) => !prev);
   };
 
+  const price = productDetail?.price || 0;
+  const discount = productDetail?.discount || 0;
+  const discountPrice = price - Math.round((price * discount) / 100);
+  const isHaveDiscount = discount && discount !== 0;
+
   return (
     <Box>
       <Container sx={{ marginTop: 4 }}>
@@ -51,13 +70,13 @@ const ProductDetailPage = () => {
                 height: 'auto',
                 objectFit: 'contain',
               }}
-              image={link || ''}
+              image={productDetail?.image || ''}
             />
           </Box>
           {/* Product Details */}
           <Grid item xs={12} md={6}>
             <Typography sx={{ fontWeight: 'bold' }} variant="h4">
-              Nike Airmax 270 React
+              {productDetail?.name}
             </Typography>
             <Divider
               sx={{
@@ -71,24 +90,28 @@ const ProductDetailPage = () => {
               color="#40BFFF"
               sx={{ marginTop: 2, fontWeight: 'bold' }}
             >
-              đ1.000.000{' '}
-              <Typography
-                color="#9098B1"
-                variant="body2"
-                component="span"
-                sx={{ textDecoration: 'line-through', marginLeft: 1 }}
-              >
-                đ{'1.000.000'}
-              </Typography>
-              <Typography
-                color="#FB7181"
-                variant="body2"
-                component="span"
-                fontWeight={'700'}
-                sx={{ marginLeft: 1 }}
-              >
-                ({'25% Off'})
-              </Typography>
+              đ{formatPrice(isHaveDiscount ? discountPrice : price)}
+              {isHaveDiscount ? (
+                <>
+                  <Typography
+                    color="#9098B1"
+                    variant="body2"
+                    component="span"
+                    sx={{ textDecoration: 'line-through', marginLeft: 1 }}
+                  >
+                    đ{formatPrice(price)}
+                  </Typography>
+                  <Typography
+                    color="#FB7181"
+                    variant="body2"
+                    component="span"
+                    fontWeight={'700'}
+                    sx={{ marginLeft: 1 }}
+                  >
+                    {discount}%Off
+                  </Typography>
+                </>
+              ) : null}
             </Typography>
             <Box
               sx={{
@@ -115,7 +138,7 @@ const ProductDetailPage = () => {
                 width: 300,
               }}
             >
-              <Typography>Size</Typography>
+              <Typography>Kích cỡ</Typography>
               <Select
                 sx={{ width: 150, alignItems: 'center', height: 35 }}
                 value={size}
@@ -183,7 +206,7 @@ const ProductDetailPage = () => {
             </Box>
           </Grid>
         </Grid>
-        <ProductContentTabs />
+        <ProductContentTabs description={productDetail?.description || ''} />
       </Container>
     </Box>
   );

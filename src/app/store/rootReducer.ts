@@ -6,8 +6,8 @@ import productListReducer from '../product-list/store/reducers/get-product';
 import brandsReducer from '../product-list/store/reducers/get-brands';
 import registerReducer from '../register/store/reducers/register';
 import loginReducer from '../login/store/reducers/login';
-
 import latestProductReducer from './reducers/get-latest-product';
+import productDetailReducer from '../product-detail/store/reducers/get-product-detail';
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -17,6 +17,7 @@ const rootReducer = combineReducers({
   brands: brandsReducer,
   register: registerReducer,
   login: loginReducer,
+  productDetail: productDetailReducer,
 });
 
 export default rootReducer;

@@ -3,7 +3,7 @@
 import { Tabs, Tab, Box, Typography } from '@mui/material';
 import { useState } from 'react';
 
-const ProductContentTabs = () => {
+const ProductContentTabs = ({ description }: { description: string }) => {
   const [value, setValue] = useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -26,17 +26,7 @@ const ProductContentTabs = () => {
       </Tabs>
       {value === 0 && (
         <Box sx={{ padding: 2 }}>
-          <Typography>
-            Chất lượng tốt: độ bền đế ngoài, độ êm đế giữa, độ mềm lót trong tất
-            cả đều hoàn hảo với 1 đôi giày dành cho chạy ổn định với tốc độ từ
-            trung bình đến cao (tiệm cận mức cao thôi, cao quá thì lại hơi
-            nặng). Độ rộng toe box được cải thiện: thay vì form chân narrow fit
-            như các mẫu trước, mẫu này có độ rộng toe box cực chuẩn và phù hợp
-            với form chân người Việt (hơi bè). Độ co giãn và thoải mái của upper
-            hoàn hảo: mềm mại, ôm sát, thoáng khí, thông hơi cực tốt, upper
-            thoải mái nhất trong tất cả các dòng giày của Kiprun tính đến hiện
-            tại. Cực hài lòng!
-          </Typography>
+          <Typography>{description}</Typography>
         </Box>
       )}
       {value === 1 && (

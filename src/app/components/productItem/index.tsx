@@ -41,7 +41,9 @@ const ProductItem = ({
   };
 
   const onNavigateDetail = () => {
-    const url = `/product-detail?link=${imageUrl}`;
+    console.log('aaa00', id);
+
+    const url = `/product-detail?id=${id}`;
     router.push(url);
   };
 
