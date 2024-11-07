@@ -18,7 +18,6 @@ import {
   ListItemIcon,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useRouter } from 'next/navigation';
 import InfoIcon from '@mui/icons-material/Info';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -58,9 +57,9 @@ const ResultsList = styled(Paper)(({ theme }) => ({
 }));
 
 const Header: React.FC = () => {
-  const [searchOpen, setSearchOpen] = useState(false); // State to toggle search bar visibility
-  const [searchQuery, setSearchQuery] = useState(''); // State for the search query
-  const [searchResults, setSearchResults] = useState<string[]>([]); // State for search results
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<string[]>([]);
   const [user, setUser] = useState(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -73,12 +72,10 @@ const Header: React.FC = () => {
   };
 
   const handleProfileClick = () => {
-    // Navigate to profile details or perform profile-related actions
     console.log('Profile clicked');
     handleClose();
   };
 
-  // Sample data
   const items = [
     'Apple',
     'Banana',
@@ -98,17 +95,15 @@ const Header: React.FC = () => {
   }, []);
 
   const handleCartClick = () => {
-    window.location.href = '/cart'; // Redirect to the cart page
+    window.location.href = '/cart';
   };
 
-  const router = useRouter();
-
   const gotoRegister = () => {
-    router.push('/register');
+    window.location.href = '/register';
   };
 
   const gotoLogin = () => {
-    router.push('/login');
+    window.location.href = '/login';
   };
 
   const handleLogout = () => {
@@ -119,18 +114,22 @@ const Header: React.FC = () => {
   };
 
   const handleSearchClick = () => {
-    setSearchOpen(!searchOpen); // Toggle the search bar
+    setSearchOpen(!searchOpen);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
     setSearchQuery(query);
 
-    // Filter the sample data based on the search query
     const filteredResults = items.filter((item) =>
       item.toLowerCase().includes(query.toLowerCase())
     );
     setSearchResults(filteredResults);
+  };
+
+  // Sự kiện chuyển trang khi bấm vào nút Liên hệ
+  const handleContactClick = () => {
+    window.location.href = '/contact'; // Chuyển đến trang Contact
   };
 
   return (
@@ -143,11 +142,7 @@ const Header: React.FC = () => {
         }}
       >
         {/* Logo */}
-        <Link
-          href="/"
-          underline="none"
-          sx={{ display: 'flex', alignItems: 'center' }}
-        >
+        <Link href="/" underline="none" sx={{ display: 'flex', alignItems: 'center' }}>
           <Box
             sx={{
               backgroundColor: '#58c9f3',
@@ -174,7 +169,6 @@ const Header: React.FC = () => {
             alignItems: 'center',
             gap: 4,
             marginRight: 12,
-            // Adjust for mobile view
             '@media (max-width: 600px)': {
               gap: 2,
               marginRight: 2,
@@ -183,23 +177,10 @@ const Header: React.FC = () => {
         >
           {!user ? (
             <Box display={'flex'}>
-              <Typography
-                onClick={gotoRegister}
-                component="a"
-                color="primary"
-                href="#"
-                fontWeight="bold"
-              >
+              <Typography onClick={gotoRegister} component="a" color="primary" href="#" fontWeight="bold">
                 Đăng Ký
               </Typography>
-              <Typography
-                onClick={gotoLogin}
-                marginLeft={5}
-                component="a"
-                color="primary"
-                href="#"
-                fontWeight="bold"
-              >
+              <Typography onClick={gotoLogin} marginLeft={5} component="a" color="primary" href="#" fontWeight="bold">
                 Đăng nhập
               </Typography>
             </Box>
@@ -233,12 +214,6 @@ const Header: React.FC = () => {
                   </ListItemIcon>
                   Sản phẩm yêu thích
                 </MenuItem>
-                {/* <MenuItem>
-                  <ListItemIcon>
-                    <ShoppingCartIcon fontSize="small" />
-                  </ListItemIcon>
-                  Đơn hàng
-                </MenuItem> */}
                 <MenuItem onClick={handleLogout}>
                   <ListItemIcon>
                     <LogoutIcon fontSize="small" />
@@ -269,7 +244,6 @@ const Header: React.FC = () => {
                 value={searchQuery}
                 onChange={handleSearchChange}
               />
-              {/* Search Results */}
               {searchResults.length > 0 && (
                 <ResultsList>
                   {searchResults.map((result, index) => (
@@ -282,8 +256,7 @@ const Header: React.FC = () => {
                       }}
                       onClick={() => {
                         setSearchQuery(result);
-                        setSearchResults([]); // Clear results after selection
-                        // Handle the search result click here (e.g., redirect to a product page)
+                        setSearchResults([]);
                       }}
                     >
                       {result}
@@ -293,11 +266,16 @@ const Header: React.FC = () => {
               )}
             </Search>
           )}
+
+          {/* Liên hệ */}
+          <Typography onClick={handleContactClick} color="primary" fontWeight="bold" sx={{ cursor: 'pointer' }}>
+            Liên hệ
+          </Typography>
         </Box>
       </Toolbar>
       <Divider
         sx={{
-          width: { xs: '100%' }, // Full width on small screens, 600px on larger screens
+          width: { xs: '100%' },
           backgroundColor: '#F6F7F8',
         }}
       />
