@@ -26,6 +26,6 @@
     "**/*.ts", 
     "**/*.tsx", 
     ".next/types/**/*.ts"
-  ],
+, "src/app/public/asset/icons/ShippingIC.jsx"  ],
   "exclude": ["node_modules"]
 }

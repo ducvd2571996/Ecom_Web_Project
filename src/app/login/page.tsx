@@ -24,7 +24,7 @@ const Login = () => {
       {/* Phần bên trái: Banner */}
       <div className="w-3/5 h-full bg-blue-500 relative">
         <img
-          src="Ảnh"  // Ảnh
+          src="Ảnh" // Ảnh
           alt="Fashion Sale"
           className="object-cover w-full h-full"
         />
@@ -34,7 +34,7 @@ const Login = () => {
       <div className="w-2/5 bg-white p-8 flex items-center justify-center">
         <div className="max-w-md w-full">
           <Typography variant="h5" component="h1" align="center" gutterBottom>
-            Log in
+            Đăng nhập
           </Typography>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -71,12 +71,7 @@ const Login = () => {
             />
 
             {/* Nút đăng nhập */}
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-            >
+            <Button type="submit" variant="contained" color="primary" fullWidth>
               Sign in
             </Button>
           </form>
@@ -85,7 +80,13 @@ const Login = () => {
           <div className="mt-4 flex items-center justify-center">
             <Button
               variant="outlined"
-              startIcon={<img src="/path_to_google_icon/google.svg" alt="Google Icon" className="h-5 w-5" />}
+              startIcon={
+                <img
+                  src="/path_to_google_icon/google.svg"
+                  alt="Google Icon"
+                  className="h-5 w-5"
+                />
+              }
               fullWidth
             >
               Or sign in with Google
@@ -95,7 +96,10 @@ const Login = () => {
           {/* Đăng ký */}
           <div className="text-center mt-4">
             <Typography variant="body2">
-              Don't have an account? <a href="#" style={{ color: '#1976d2' }}>Sign up now</a>
+              Don't have an account?{' '}
+              <a href="#" style={{ color: '#1976d2' }}>
+                Sign up now
+              </a>
             </Typography>
           </div>
         </div>
