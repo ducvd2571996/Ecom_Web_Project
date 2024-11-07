@@ -1,29 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import { RootState } from '@/app/store/store';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import InfoIcon from '@mui/icons-material/Info';
+import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import {
   AppBar,
   Badge,
   Box,
-  IconButton,
-  Link,
-  Toolbar,
-  Typography,
-  InputBase,
-  Paper,
   Divider,
+  IconButton,
+  InputBase,
+  Link,
+  ListItemIcon,
   Menu,
   MenuItem,
-  ListItemIcon,
+  Paper,
+  Toolbar,
+  Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import InfoIcon from '@mui/icons-material/Info';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/app/store/store';
-import { getCartHanlder } from '@/app/cart/store/reducers/cart';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -66,7 +65,7 @@ const Header: React.FC = () => {
   const [user, setUser] = useState(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [localAmount, setLocalAmount] = useState(0); // Local state for amount
-  const amount = useSelector((state: RootState) => state.cart.amount);
+  const amount = useSelector((state: RootState) => state.cart?.amount);
   const userData = localStorage.getItem('user');
   const cachedUser = userData ? JSON.parse(userData) : null;
 
