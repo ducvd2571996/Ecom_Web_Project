@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import {
   Container,
@@ -13,19 +14,25 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import ProductContentTabs from '../components/contentTab';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductDetailHanlder } from './store/reducers/get-product-detail';
 import { RootState } from '../store/store';
 import { formatPrice } from '@/helper/formatString/format-price';
+import { CreateCartDTO } from '../model/cart.model';
+import {
+  createCartHanlder,
+  getCartHanlder,
+  updateCartHanlder,
+} from '../cart/store/reducers/cart';
 
 const ProductDetailPage = () => {
   const [size, setSize] = useState('XS');
-  const [quantity, setQuantity] = useState(2);
+  const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
-
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const id = searchParams.get('id'); // Get the 'id' query parameter
@@ -57,6 +64,54 @@ const ProductDetailPage = () => {
   const discount = productDetail?.discount || 0;
   const discountPrice = price - Math.round((price * discount) / 100);
   const isHaveDiscount = discount && discount !== 0;
+
+  const onHandleAddToCart = () => {
+    const userData = localStorage.getItem('user');
+    const user = userData ? JSON.parse(userData) : null;
+    if (user?.userInfo) {
+      const userId = user?.userInfo?.id;
+      if (user?.userInfo?.id) {
+        const product = {
+          id: productDetail?.productId,
+          name: productDetail?.name,
+          image: productDetail?.image,
+          tax: 0,
+          discount,
+          price,
+          quantity,
+          note: '',
+        } as any;
+        const cart: CreateCartDTO = {
+          products: [product],
+          customerId: userId,
+          isAddToCart: true,
+        };
+        dispatch(
+          getCartHanlder({
+            userId,
+            callback: (rs: any) => {
+              if (rs?.data) {
+                dispatch(
+                  updateCartHanlder({
+                    cart,
+                  })
+                );
+              } else {
+                dispatch(
+                  createCartHanlder({
+                    cart,
+                  })
+                );
+              }
+            },
+          })
+        );
+      }
+    } else {
+      const url = `/login`;
+      router.push(url);
+    }
+  };
 
   return (
     <Box>
@@ -180,7 +235,11 @@ const ProductDetailPage = () => {
               }}
             />
             <Box sx={{ display: 'flex', height: 48 }}>
-              <Button variant="contained" color="primary">
+              <Button
+                onClick={onHandleAddToCart}
+                variant="contained"
+                color="primary"
+              >
                 Thêm vào giỏ hàng
               </Button>
 

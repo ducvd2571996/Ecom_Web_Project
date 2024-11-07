@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Button, Grid } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import ProductItem from '../productItem';
 import { getCateListHanlder } from '@/app/store/reducers';
 import { RootState } from '@/app/store/store';
@@ -9,34 +8,40 @@ import { getProductListHanlder } from '@/app/product-list/store/reducers/get-pro
 
 const BestSeller = () => {
   const [selectedCategory, setSelectedCategory] = useState(0);
-
-  const handleTabChange = (category: any) => {
-    setSelectedCategory(category);
-  };
-
   const dispatch = useDispatch();
 
+  // Only dispatch once for category list fetching (on mount)
   const { cateList } = useSelector((state: RootState) => state.cateList);
 
-  const newCateList = [{ id: 0, name: 'Tất cả' }, ...cateList];
+  const newCateList = useMemo(() => {
+    return [{ id: 0, name: 'Tất cả' }, ...cateList];
+  }, [cateList]);
 
   useEffect(() => {
     dispatch(getCateListHanlder());
-  }, [dispatch]);
+  }, [dispatch]); // This effect runs only once on component mount
 
   const { productList } = useSelector((state: RootState) => state.productList);
 
   useEffect(() => {
-    dispatch(getProductListHanlder({}));
-  }, [dispatch]);
+    if (productList.length === 0) {
+      // Only dispatch if product list is empty
+      dispatch(getProductListHanlder({}));
+    }
+  }, [dispatch, productList.length]); // Run only once when productList is empty
 
-  // Filter products based on the selected category
-  const filteredProducts =
-    selectedCategory === 0
+  // Use useMemo to avoid recalculating filtered products on every render
+  const filteredProducts = useMemo(() => {
+    return selectedCategory === 0
       ? productList
       : productList.filter(
           (product) => product?.categoryId === selectedCategory
         );
+  }, [selectedCategory, productList]); // Only re-filter when selectedCategory or productList changes
+
+  const handleTabChange = (categoryId: number) => {
+    setSelectedCategory(categoryId);
+  };
 
   return (
     <Box sx={{ paddingX: 12, paddingTop: 10 }}>

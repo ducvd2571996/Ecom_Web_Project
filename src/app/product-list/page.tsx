@@ -17,10 +17,12 @@ export default function Home() {
           paddingRight: 2,
         }}
       >
-        <Box width={'30%'} sx={{ marginRight: 2 }}>
+        <Box width={'20%'} sx={{ marginRight: 2 }}>
           <ProductFilter />
         </Box>
-        <ProductList />
+        <Box width={'75%'}>
+          <ProductList />
+        </Box>
       </Box>
     </Box>
   );

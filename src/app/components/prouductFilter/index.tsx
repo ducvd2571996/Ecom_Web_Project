@@ -14,9 +14,10 @@ import { RootState } from '@/app/store/store';
 import { getCateListHanlder } from '@/app/store/reducers';
 import { getBrandsHanlder } from '@/app/product-list/store/reducers/get-brands';
 import { getProductListHanlder } from '@/app/product-list/store/reducers/get-product';
+import { formatPrice } from '@/helper/formatString/format-price';
 
 const ProductFilter: React.FC = () => {
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000000]);
   const [selectedBrand, setSelectedBrand] = useState<number | null>(null);
   const [selectedCate, setSelectedCate] = useState<number | null>(null);
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const ProductFilter: React.FC = () => {
   useEffect(() => {
     dispatch(getCateListHanlder());
     dispatch(getBrandsHanlder());
-  }, []);
+  }, [dispatch]);
 
   const { cateList } = useSelector((state: RootState) => state.cateList);
 
@@ -40,8 +41,9 @@ const ProductFilter: React.FC = () => {
         <Typography variant="h6" gutterBottom>
           Giá tiền
         </Typography>
+        <Typography variant="body1">Khoảng giá:</Typography>
         <Typography variant="body1">
-          Khoảng giá: ${priceRange[0]} - ${priceRange[1]}
+          đ{formatPrice(priceRange[0])} - đ{formatPrice(priceRange[1])}
         </Typography>
         <Slider
           value={priceRange}
@@ -68,7 +70,12 @@ const ProductFilter: React.FC = () => {
                     underline="none"
                     color={selectedBrand === brand.id ? 'primary' : 'inherit'}
                     onClick={() => {
-                      dispatch(getProductListHanlder({ brand: brand?.id }));
+                      dispatch(
+                        getProductListHanlder({
+                          brand: brand?.id,
+                          categoryId: selectedCate,
+                        })
+                      );
                       setSelectedBrand(brand.id);
                     }}
                     sx={{
@@ -105,7 +112,15 @@ const ProductFilter: React.FC = () => {
                     href="#"
                     underline="none"
                     color={selectedCate === cate?.id ? 'primary' : 'inherit'}
-                    onClick={() => setSelectedCate(cate?.id)}
+                    onClick={() => {
+                      dispatch(
+                        getProductListHanlder({
+                          categoryId: cate?.id,
+                          brand: selectedBrand,
+                        })
+                      );
+                      setSelectedCate(cate?.id);
+                    }}
                     sx={{
                       fontWeight: selectedCate === cate?.id ? 'bold' : 'normal',
                     }}

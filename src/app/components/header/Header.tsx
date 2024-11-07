@@ -21,6 +21,9 @@ import { styled } from '@mui/material/styles';
 import InfoIcon from '@mui/icons-material/Info';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/app/store/store';
+import { getCartHanlder } from '@/app/cart/store/reducers/cart';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -62,6 +65,10 @@ const Header: React.FC = () => {
   const [searchResults, setSearchResults] = useState<string[]>([]);
   const [user, setUser] = useState(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [localAmount, setLocalAmount] = useState(0); // Local state for amount
+  const amount = useSelector((state: RootState) => state.cart.amount);
+  const userData = localStorage.getItem('user');
+  const cachedUser = userData ? JSON.parse(userData) : null;
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -72,10 +79,15 @@ const Header: React.FC = () => {
   };
 
   const handleProfileClick = () => {
-    console.log('Profile clicked');
+    // Navigate to profile details or perform profile-related actions
+
     handleClose();
   };
 
+  useEffect(() => {
+    // Update localAmount whenever Redux amount changes
+    setLocalAmount(amount);
+  }, [amount]);
   const items = [
     'Apple',
     'Banana',
@@ -89,9 +101,7 @@ const Header: React.FC = () => {
   ];
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    const user = userData ? JSON.parse(userData) : null;
-    setUser(user?.userInfo);
+    setUser(cachedUser?.userInfo);
   }, []);
 
   const handleCartClick = () => {
@@ -142,7 +152,11 @@ const Header: React.FC = () => {
         }}
       >
         {/* Logo */}
-        <Link href="/" underline="none" sx={{ display: 'flex', alignItems: 'center' }}>
+        <Link
+          href="/"
+          underline="none"
+          sx={{ display: 'flex', alignItems: 'center' }}
+        >
           <Box
             sx={{
               backgroundColor: '#58c9f3',
@@ -177,10 +191,23 @@ const Header: React.FC = () => {
         >
           {!user ? (
             <Box display={'flex'}>
-              <Typography onClick={gotoRegister} component="a" color="primary" href="#" fontWeight="bold">
+              <Typography
+                onClick={gotoRegister}
+                component="a"
+                color="primary"
+                href="#"
+                fontWeight="bold"
+              >
                 Đăng Ký
               </Typography>
-              <Typography onClick={gotoLogin} marginLeft={5} component="a" color="primary" href="#" fontWeight="bold">
+              <Typography
+                onClick={gotoLogin}
+                marginLeft={5}
+                component="a"
+                color="primary"
+                href="#"
+                fontWeight="bold"
+              >
                 Đăng nhập
               </Typography>
             </Box>
@@ -225,7 +252,7 @@ const Header: React.FC = () => {
           )}
 
           <IconButton onClick={handleCartClick}>
-            <Badge badgeContent={2} color="secondary">
+            <Badge badgeContent={localAmount} color="secondary">
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
@@ -268,7 +295,12 @@ const Header: React.FC = () => {
           )}
 
           {/* Liên hệ */}
-          <Typography onClick={handleContactClick} color="primary" fontWeight="bold" sx={{ cursor: 'pointer' }}>
+          <Typography
+            onClick={handleContactClick}
+            color="primary"
+            fontWeight="bold"
+            sx={{ cursor: 'pointer' }}
+          >
             Liên hệ
           </Typography>
         </Box>
