@@ -70,7 +70,7 @@ const ProfilePage = () => {
         </Box>
         {/* Nút Edit ở góc phải */}
         <Box sx={{ position: 'absolute', top: 5, right: 16 }}>
-          <Button variant="outlined" color="primary">
+          <Button variant="contained" color="primary">
             Edit
           </Button>
         </Box>
