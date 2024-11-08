@@ -287,7 +287,12 @@ const ProductDetailPage = () => {
               <Button
                 onClick={onHandleAddToCart}
                 variant="contained"
-                sx={{ backgroundColor: '#ebf6ff', color: '#3baafd' }}
+                sx={{ 
+                  backgroundColor: '#ebf6ff', 
+                  color: '#3baafd',
+                  textTransform: 'none',
+                  fontSize: '16px'
+                }}
                 startIcon={<ShoppingCartIcon />}
               >
                 Thêm vào giỏ hàng
