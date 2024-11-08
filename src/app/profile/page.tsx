@@ -101,6 +101,7 @@ const ProfilePage = () => {
             <Typography paddingLeft={1} variant="body2" color="textSecondary">
               Địa chỉ
             </Typography>
+
             <Box
               sx={{
                 backgroundColor: '#F9F9F9',
@@ -111,6 +112,7 @@ const ProfilePage = () => {
             >
               <Typography variant="subtitle1">{user.address}</Typography>
             </Box>
+            
           </Grid>
           <Grid item xs={6}>
             <Typography marginLeft={1} variant="body2" color="textSecondary">
