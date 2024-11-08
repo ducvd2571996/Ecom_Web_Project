@@ -177,12 +177,8 @@ const ProductDetailPage = () => {
                 value={rating || 5} // Hiển thị giá trị rating đã lưu hoặc mặc định là 5
                 precision={0.5}
                 onChange={handleRatingChange}
-                sx={{ fontSize: 16 }} // Thay đổi kích thước của các sao
+                sx={{ fontSize: 22 }} // Thay đổi kích thước của các sao
               />
-              <Typography variant="body2" sx={{ marginLeft: 1 }}>
-                (100 đánh giá){' '}
-                {/* Số lượng đánh giá, có thể cập nhật từ props */}
-              </Typography>
             </Box>
 
             <Divider
