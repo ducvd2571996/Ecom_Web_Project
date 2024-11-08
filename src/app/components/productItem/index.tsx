@@ -17,13 +17,19 @@ import VisibilityIcon from '@mui/icons-material/Visibility'; // Import the Visib
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { formatPrice } from '@/helper/formatString/format-price';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   createCartHanlder,
   updateCartHanlder,
   getCartHanlder,
 } from '@/app/cart/store/reducers/cart';
 import { CreateCartDTO } from '@/app/model/cart.model';
+import {
+  getWishList,
+  updateWishList,
+} from '@/app/wish-list/store/reducers/wish-list';
+import { RootState } from '@/app/store/store';
+import { Product } from '@/app/model';
 
 interface ProductItemProps {
   id: number;
@@ -34,6 +40,7 @@ interface ProductItemProps {
   rating?: number; // Thêm thuộc tính rating
   ratingCount?: number; // Thêm thuộc tính ratingCount
   length?: number;
+  product: Product;
 }
 
 const ProductItem = ({
@@ -42,10 +49,10 @@ const ProductItem = ({
   price,
   discount,
   imageUrl,
+  product,
 }: ProductItemProps) => {
   const router = useRouter();
   const [hovered, setHovered] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
   const dispatch = useDispatch();
   const [rating, setRating] = useState<number | null>(null); // Thay giá trị mặc định là null để khi render lại sẽ lấy từ storage
 
@@ -56,10 +63,16 @@ const ProductItem = ({
       setRating(Number(storedRating)); // Nếu có, đặt giá trị rating từ localStorage
     }
   }, [id]);
+  const { wishList } = useSelector((state: RootState) => state.wishList);
+  const isInWishList = wishList?.find((product) => product?.productId === id);
 
   const handleFavoriteToggle = () => {
-    setIsFavorite((prev) => !prev);
+    dispatch(updateWishList(product));
   };
+
+  useEffect(() => {
+    dispatch(getWishList());
+  }, [wishList?.length]);
 
   const onNavigateDetail = () => {
     const url = `/product-detail?id=${id}`;
@@ -115,7 +128,10 @@ const ProductItem = ({
   };
 
   // Hàm xử lý khi người dùng thay đổi rating
-  const handleRatingChange = (event: React.ChangeEvent<{}>, newRating: number | null) => {
+  const handleRatingChange = (
+    event: React.ChangeEvent<{}>,
+    newRating: number | null
+  ) => {
     if (newRating !== null) {
       setRating(newRating);
       // Lưu rating vào localStorage để duy trì giá trị khi người dùng quay lại
@@ -171,9 +187,9 @@ const ProductItem = ({
               justifyContent: 'center',
             }}
           >
-            <Tooltip title={isFavorite ? 'Bỏ thích' : 'Yêu thích'}>
+            <Tooltip title={isInWishList ? 'Bỏ thích' : 'Yêu thích'}>
               <IconButton onClick={handleFavoriteToggle}>
-                {isFavorite ? (
+                {isInWishList ? (
                   <FavoriteIcon color="error" />
                 ) : (
                   <FavoriteBorderIcon sx={{ color: '#33A0FF' }} />
@@ -209,7 +225,14 @@ const ProductItem = ({
           </Typography>
 
           {/* Icons container */}
-          <Box sx={{ display: 'flex', alignItems: 'center', marginY: 1, justifyContent: 'center' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              marginY: 1,
+              justifyContent: 'center',
+            }}
+          >
             <Rating
               name="product-rating"
               value={rating || 5} // Hiển thị giá trị rating đã lưu hoặc mặc định là 5

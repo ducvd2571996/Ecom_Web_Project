@@ -14,9 +14,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Product } from '../model/cart.model';
 import { Order } from '../model/order.model';
-import { getOrderListHanlder } from '../payment/store/reducers/payment';
 import { RootState } from '../store/store';
 import { useRouter } from 'next/navigation';
+import { getOrderListHanlder } from '../payment/store/reducers/payment';
 
 export default function OrderPage() {
   const [orders, setOrder] = useState<Order[]>([]);
