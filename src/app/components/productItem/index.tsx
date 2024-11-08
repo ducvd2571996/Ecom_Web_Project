@@ -23,6 +23,7 @@ import {
   getCartHanlder,
 } from '@/app/cart/store/reducers/cart';
 import { CreateCartDTO } from '@/app/model/cart.model';
+import { Rating } from '@mui/material';
 
 interface ProductItemProps {
   id: number;
@@ -30,6 +31,8 @@ interface ProductItemProps {
   price: number;
   discount: number;
   imageUrl: string;
+  rating?: number; // Thêm thuộc tính rating
+  ratingCount?: number; // Thêm thuộc tính ratingCount
   length?: number;
 }
 
@@ -124,64 +127,25 @@ const ProductItem = ({
               width: '100%',
               height: 100,
               objectFit: 'contain',
+              cursor: 'pointer',
             }}
             image={imageUrl}
             alt={name}
+            onClick={onNavigateDetail} // Gọi hàm khi click vào hình ảnh
           />
         </Box>
 
-        <CardContent style={{ alignItems: 'center' }}>
-          <Typography
-            gutterBottom
-            variant="h6"
-            component="div"
-            sx={{
-              display: '-webkit-box',
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              WebkitLineClamp: 1,
-            }}
-          >
-            {name}
-          </Typography>
-          <></>
-          <Typography variant="body2" color="#40BFFF">
-            đ{formatPrice(isHaveDiscount ? discountPrice : price)}
-            {isHaveDiscount ? (
-              <>
-                <Typography
-                  color="#9098B1"
-                  variant="body2"
-                  component="span"
-                  sx={{ textDecoration: 'line-through', marginLeft: 1 }}
-                >
-                  đ{formatPrice(price)}
-                </Typography>
-                <Typography
-                  color="#FB7181"
-                  variant="body2"
-                  component="span"
-                  fontWeight={'700'}
-                  sx={{ marginLeft: 1 }}
-                >
-                  {discount}%Off
-                </Typography>
-              </>
-            ) : null}
-          </Typography>
-        </CardContent>
-
-        {/* Icons container */}
+        {/* Hiệu ứng hover xung quanh ảnh */}
         {hovered && (
           <Box
             sx={{
               position: 'absolute',
-              top: '50%',
+              top: '33%',
               left: '50%',
               display: 'flex',
               backgroundColor: '#F1F3F4',
               width: '80%',
-              height: '80%',
+              height: '50%',
               gap: 1,
               transform: 'translate(-50%, -50%)',
               alignItems: 'center',
@@ -209,6 +173,60 @@ const ProductItem = ({
             </Tooltip>
           </Box>
         )}
+
+        <CardContent style={{ alignItems: 'center' }}>
+          <Typography
+            gutterBottom
+            variant="h6"
+            component="div"
+            sx={{
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              WebkitLineClamp: 1,
+            }}
+          >
+            {name}
+          </Typography>
+
+          {/* Icons container */}
+          <Box sx={{ display: 'flex', alignItems: 'center', marginY: 1 }}>
+            <Rating
+              name="product-rating"
+              value={4} // Giá trị rating mặc định hoặc lấy từ props nếu có
+              precision={0.5}
+              readOnly
+            />
+            <Typography variant="body2" sx={{ marginLeft: 1 }}>
+              (100 đánh giá) {/* Số lượng đánh giá, có thể cập nhật từ props */}
+            </Typography>
+          </Box>
+
+          <Typography variant="body2" color="#40BFFF">
+            đ{formatPrice(isHaveDiscount ? discountPrice : price)}
+            {isHaveDiscount ? (
+              <>
+                <Typography
+                  color="#9098B1"
+                  variant="body2"
+                  component="span"
+                  sx={{ textDecoration: 'line-through', marginLeft: 1 }}
+                >
+                  đ{formatPrice(price)}
+                </Typography>
+                <Typography
+                  color="#FB7181"
+                  variant="body2"
+                  component="span"
+                  fontWeight={'700'}
+                  sx={{ marginLeft: 1 }}
+                >
+                  {discount}%Off
+                </Typography>
+              </>
+            ) : null}
+          </Typography>
+        </CardContent>
       </Card>
     </Grid>
   );
