@@ -1,5 +1,4 @@
-import { Box, Container } from '@mui/material';
-import Image from 'next/image'; // Importing Next.js Image
+import { Box, CardMedia } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 const Banner = () => {
@@ -21,14 +20,15 @@ const Banner = () => {
   }, [images.length]);
 
   return (
-    <Box sx={{ position: 'relative', width: '100%', height: '400px' }}>
-      {/* Using Next.js Image for optimized loading */}
-      <Image
-        src={images[currentIndex]}
+    <Box sx={{ position: 'relative' }}>
+      <CardMedia
+        component="img"
+        sx={{
+          width: '100%',
+          height: 400,
+        }}
+        image={images[currentIndex]}
         alt={`Slide ${currentIndex + 1}`}
-        layout="fill" // Ensures it takes the entire container
-        objectFit="cover" // Maintains aspect ratio while covering the container
-        priority // For loading priority
       />
     </Box>
   );

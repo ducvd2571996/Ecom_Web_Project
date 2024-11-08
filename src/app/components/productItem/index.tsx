@@ -144,6 +144,7 @@ const ProductItem = ({
           >
             {name}
           </Typography>
+          <></>
           <Typography variant="body2" color="#40BFFF">
             đ{formatPrice(isHaveDiscount ? discountPrice : price)}
             {isHaveDiscount ? (
