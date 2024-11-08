@@ -8,12 +8,13 @@ import {
   Box,
   IconButton,
   Tooltip,
+  Rating,
 } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import VisibilityIcon from '@mui/icons-material/Visibility'; // Import the Visibility icon
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { formatPrice } from '@/helper/formatString/format-price';
 import { useDispatch } from 'react-redux';
@@ -23,7 +24,6 @@ import {
   getCartHanlder,
 } from '@/app/cart/store/reducers/cart';
 import { CreateCartDTO } from '@/app/model/cart.model';
-import { Rating } from '@mui/material';
 
 interface ProductItemProps {
   id: number;
@@ -47,7 +47,15 @@ const ProductItem = ({
   const [hovered, setHovered] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const dispatch = useDispatch();
-  const [rating, setRating] = useState<number | null>(5); // Giá trị mặc định là 5
+  const [rating, setRating] = useState<number | null>(null); // Thay giá trị mặc định là null để khi render lại sẽ lấy từ storage
+
+  useEffect(() => {
+    // Kiểm tra xem rating đã được lưu trong localStorage chưa
+    const storedRating = localStorage.getItem(`rating-${id}`);
+    if (storedRating) {
+      setRating(Number(storedRating)); // Nếu có, đặt giá trị rating từ localStorage
+    }
+  }, [id]);
 
   const handleFavoriteToggle = () => {
     setIsFavorite((prev) => !prev);

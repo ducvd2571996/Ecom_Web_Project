@@ -9,9 +9,10 @@ import {
   CardMedia,
   Grid,
   Typography,
+  Rating,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function FeaturedProducts() {
@@ -20,6 +21,8 @@ export default function FeaturedProducts() {
   );
   const dispatch = useDispatch();
   const router = useRouter();
+  const [ratings, setRatings] = useState<{ [key: number]: number | null }>({}); // Store ratings for each product
+
   useEffect(() => {
     dispatch(getLatestProductHanlder());
   }, [dispatch]);
@@ -33,6 +36,8 @@ export default function FeaturedProducts() {
     const { price, discount, productId } = product;
     const discountPrice = price - Math.round((price * discount) / 100);
     const isHaveDiscount = discount && discount !== 0;
+
+    const initialRating = ratings[productId] || 0; // Default rating if none exists
 
     return (
       <Grid item xs={12} sm={6} md={3} key={product.productId}>
@@ -94,10 +99,31 @@ export default function FeaturedProducts() {
                 </>
               ) : null}
             </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', marginY: 1, justifyContent: 'center' }}>
+              <Rating
+                name={`product-rating-${product.productId}`}
+                value={ratings[product.productId] || initialRating} // Display the saved rating or the default
+                precision={0.5}
+                onChange={(event, newRating) => handleRatingChange(product.productId, newRating)}
+                sx={{ fontSize: 16 }} // Adjust the font size of the stars
+              />
+            </Box>
           </CardContent>
         </Card>
       </Grid>
     );
+  };
+
+  // Hàm xử lý khi người dùng thay đổi rating
+  const handleRatingChange = (productId: number, newRating: number | null) => {
+    if (newRating !== null) {
+      setRatings((prevRatings) => ({
+        ...prevRatings,
+        [productId]: newRating, // Store the rating for the specific product
+      }));
+      // Lưu rating vào localStorage để duy trì giá trị khi người dùng quay lại
+      localStorage.setItem(`rating-${productId}`, String(newRating));
+    }
   };
 
   return (
@@ -107,7 +133,8 @@ export default function FeaturedProducts() {
       </Typography>
       <Grid container spacing={3} justifyContent="center" marginTop={1}>
         {latestProduct?.map((product) => productItem(product))}
-      </Grid>
+      </Grid>{/* Rating Section */}
+
     </Box>
   );
 }
