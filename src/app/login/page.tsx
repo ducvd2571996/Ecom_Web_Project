@@ -189,6 +189,25 @@ export default function LoginPage() {
             Đăng ký
           </Typography>
         </Typography>
+  {/* admin login */}
+        <Typography
+  variant="body2"
+  color="primary"
+  sx={{
+    textDecoration: 'underline',
+    cursor: 'pointer',
+    mt: 2,
+    '&:hover': {
+      color: 'darkblue', // Màu hover
+    },
+  }}
+  onClick={() => {
+    // Thực hiện logic đăng nhập admin
+  }}
+>
+  Đăng nhập với tư cách quản trị viên
+</Typography>
+
         <Snackbar
           open={isLoginSuccess}
           autoHideDuration={2000}
