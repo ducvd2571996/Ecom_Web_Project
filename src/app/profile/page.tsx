@@ -14,12 +14,14 @@ const ProfilePage = () => {
     email: 'rex4dom@gmail.com',
     phone: '(307) 555-0133',
     password: '********',
-    avatar: 'https://saigoncomputer.vn/uploads/hinh-nen-may-tinh-cuc-dep(4).jpg', // Thay bằng đường dẫn ảnh đại diện của bạn
-    coverImage: 'https://www.didongmy.com/vnt_upload/news/03_2024/hinh-nen-4k-la-gi-Didongmy.jpg', // Thay bằng đường dẫn ảnh nền của bạn
+    avatar:
+      'https://saigoncomputer.vn/uploads/hinh-nen-may-tinh-cuc-dep(4).jpg', // Thay bằng đường dẫn ảnh đại diện của bạn
+    coverImage:
+      'https://www.didongmy.com/vnt_upload/news/03_2024/hinh-nen-4k-la-gi-Didongmy.jpg', // Thay bằng đường dẫn ảnh nền của bạn
   };
 
   return (
-    <Box sx={{ maxWidth: 800, mx: 'auto', my: 4 }}>
+    <Box sx={{ mx: 'auto', my: 4 }}>
       {/* Ảnh bìa */}
       <Box
         sx={{
@@ -50,34 +52,33 @@ const ProfilePage = () => {
       {/* Thông tin cá nhân */}
       <Paper sx={{ p: 3, mt: 6 }}>
         {/* Name and Edit Button */}
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          position: 'relative',
-          flexDirection: 'column',
-          
-        }}
-      >
-        <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="h6" fontWeight="bold">
-            {user.name}
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            {user.username}
-          </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            position: 'relative',
+            flexDirection: 'column',
+          }}
+        >
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="h6" fontWeight="bold">
+              {user.name}
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              {user.username}
+            </Typography>
+          </Box>
+          {/* Nút Edit ở góc phải */}
+          <Box sx={{ position: 'absolute', top: 5, right: 16 }}>
+            <Button variant="outlined" color="primary">
+              Edit
+            </Button>
+          </Box>
         </Box>
-        {/* Nút Edit ở góc phải */}
-        <Box sx={{ position: 'absolute', top: 5, right: 16 }}>
-          <Button variant="outlined" color="primary">
-            Edit
-          </Button>
-        </Box>
-      </Box>
 
         {/* Grid chứa các thông tin */}
-        <Grid container spacing={2} sx={{ mt: 4 }}>
+        <Grid container spacing={2} sx={{ mt: 4, paddingLeft: 8 }}>
           <Grid item xs={6}>
             <Typography variant="body2" color="textSecondary">
               Giới tính
@@ -91,16 +92,33 @@ const ProfilePage = () => {
             <Typography variant="subtitle1">{user.dob}</Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography variant="body2" color="textSecondary">
+            <Typography paddingLeft={1} variant="body2" color="textSecondary">
               Địa chỉ
             </Typography>
-            <Typography variant="subtitle1">{user.address}</Typography>
+            <Box
+              sx={{
+                backgroundColor: '#F9F9F9',
+                borderRadius: 1,
+                paddingLeft: 1,
+                marginRight: 2,
+              }}
+            >
+              <Typography variant="subtitle1">{user.address}</Typography>
+            </Box>
           </Grid>
           <Grid item xs={6}>
-            <Typography variant="body2" color="textSecondary">
+            <Typography marginLeft={1} variant="body2" color="textSecondary">
               Email
             </Typography>
-            <Typography variant="subtitle1">{user.email}</Typography>
+            <Box
+              sx={{
+                backgroundColor: '#F9F9F9',
+                borderRadius: 1,
+                paddingLeft: 1,
+              }}
+            >
+              <Typography variant="subtitle1">{user.email}</Typography>
+            </Box>
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="textSecondary">
