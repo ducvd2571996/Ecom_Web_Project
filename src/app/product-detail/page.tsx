@@ -152,7 +152,7 @@ const ProductDetailPage = () => {
             </Typography>
 
             {/* Icons container */}
-            <Box sx={{ display: 'flex', alignItems: 'center', marginY: 1, justifyContent: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', marginY: 1 }}>
               <Rating
                 name="product-rating"
                 value={rating || 5} // Hiển thị giá trị rating đã lưu hoặc mặc định là 5
