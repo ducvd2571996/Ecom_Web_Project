@@ -10,7 +10,7 @@ import {
   AppBar,
   Badge,
   Box,
-  Divider,  // Giữ nguyên import Divider
+  Divider, // Giữ nguyên import Divider
   IconButton,
   InputBase,
   Link,
@@ -119,6 +119,9 @@ const Header: React.FC = () => {
 
   const gotoLogin = () => {
     window.location.href = '/login';
+  };
+  const gotoDetail = () => {
+    window.location.href = '/product-detail';
   };
 
   const gotoOrder = () => {
