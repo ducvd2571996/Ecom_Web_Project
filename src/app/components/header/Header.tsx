@@ -5,6 +5,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import OrderIcon from '@mui/icons-material/ListAlt';
 import {
   AppBar,
   Badge,
@@ -69,7 +70,7 @@ const Header: React.FC = () => {
   const amount = useSelector((state: RootState) => state.cart?.amount);
   const userData = localStorage.getItem('user');
   const cachedUser = userData ? JSON.parse(userData) : null;
-  const router = useRouter()
+  const router = useRouter();
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -114,6 +115,14 @@ const Header: React.FC = () => {
 
   const gotoLogin = () => {
     window.location.href = '/login';
+  };
+
+  const gotoOrder = () => {
+    window.location.href = '/order';
+  };
+
+  const gotoWishList = () => {
+    window.location.href = '/wish-list';
   };
 
   const handleLogout = () => {
@@ -235,11 +244,17 @@ const Header: React.FC = () => {
                   </ListItemIcon>
                   Thông tin cá nhân
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={gotoWishList}>
                   <ListItemIcon>
                     <FavoriteIcon fontSize="small" />
                   </ListItemIcon>
                   Sản phẩm yêu thích
+                </MenuItem>
+                <MenuItem onClick={gotoOrder}>
+                  <ListItemIcon>
+                    <OrderIcon fontSize="small" />
+                  </ListItemIcon>
+                  Đơn hàng
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>
                   <ListItemIcon>

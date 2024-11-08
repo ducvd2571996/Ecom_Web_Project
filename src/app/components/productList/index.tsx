@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductListHanlder } from '../../product-list/store/reducers/get-product';
 import ProductItem from '../productItem';
+import { Product } from '@/app/model';
 
 const ProductList = () => {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ const ProductList = () => {
     <Box>
       {/* Product Grid */}
       <Grid container spacing={5}>
-        {productList?.map?.((product) => (
+        {productList?.map?.((product: Product) => (
           <ProductItem
             length={productList?.length}
             key={product.productId}

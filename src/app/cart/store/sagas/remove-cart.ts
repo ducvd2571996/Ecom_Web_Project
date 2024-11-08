@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { RemoveCartItem } from '@/app/model/cart.model';
 import axios from 'axios';
 import { call, put } from 'redux-saga/effects';
-import { Cart } from '@/app/model/cart.model';
-import { updateCartSuccess } from '../reducers/cart';
+import { removeCartItemSuccess } from '../reducers/cart';
 
 interface DataType {
   status: number;
@@ -11,7 +11,7 @@ interface DataType {
 }
 
 interface PayloadType {
-  cart: Cart;
+  item: RemoveCartItem;
   callback: (data: any) => any;
 }
 
@@ -20,12 +20,12 @@ interface ActionType {
   payload: PayloadType;
 }
 
-const onUpdateCart = async (data: Cart) => {
+const onRemoveCartItem = async (item: RemoveCartItem) => {
   const token = localStorage.getItem('token');
   const response = await axios.put(
-    'http://127.0.0.1:3003/carts',
+    'http://127.0.0.1:3003/carts/remove-item',
     {
-      ...data,
+      ...item,
     },
     {
       headers: {
@@ -37,19 +37,21 @@ const onUpdateCart = async (data: Cart) => {
   return response.data;
 };
 
-function* updateCartSaga(action: ActionType): Generator<any, void, DataType> {
-  const { callback, cart } = action?.payload;
+function* removeCartItemSaga(
+  action: ActionType
+): Generator<any, void, DataType> {
+  const { callback, item } = action?.payload;
   try {
-    const rs = yield call(onUpdateCart, cart);
+    const rs = yield call(onRemoveCartItem, item);
     if (rs?.status === 200) {
       callback?.(rs);
-      yield put(updateCartSuccess(rs?.data));
+      yield put(removeCartItemSuccess(rs?.data));
     } else {
       callback?.(rs);
     }
   } catch (error: any) {
-    callback?.(error?.response?.data);
+    callback(error?.response?.data);
   }
 }
 
-export default updateCartSaga;
+export default removeCartItemSaga;
