@@ -9,6 +9,13 @@ import {
 import { FC, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useTheme } from '@mui/material/styles';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import HomeIcon from '@mui/icons-material/Home';
+import PhoneIcon from '@mui/icons-material/Phone';
+import EmailIcon from '@mui/icons-material/Email';
 
 const Footer: FC = () => {
   const [openSections, setOpenSections] = useState<string[]>([]);
@@ -52,10 +59,11 @@ const Footer: FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                mr: 2,
+                mr: 3,
+                marginLeft: '30px',
               }}
             >
-              <Typography sx={{ color: 'white', fontSize: { xs: 18, md: 24 } }}>
+              <Typography sx={{ color: 'white', fontSize: { xs: 18, md: 20 } }}>
                 E
               </Typography>
             </Box>
@@ -63,7 +71,7 @@ const Footer: FC = () => {
               variant="h6"
               sx={{
                 fontWeight: 'bold',
-                fontSize: { xs: '1rem', md: '1.25rem' },
+                fontSize: { xs: '1rem', md: '1.25rem', marginLeft: -8 },
               }}
             >
               E-Comm
@@ -72,91 +80,129 @@ const Footer: FC = () => {
           <Typography
             variant="body2"
             color="text.secondary"
-            sx={{ fontSize: { xs: '0.8rem', md: '0.875rem' } }}
+            sx={{
+              fontSize: {
+                xs: '0.9rem',
+                md: '0.9rem',
+                paddingLeft: '30px',
+                paddingRight: '30px',
+                textAlign: 'justify'
+              }
+            }}
           >
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry standard dummy text
-            since the 1500s.
+            Ecomm - doanh nghiệp thời trang độc đáo, sáng tạo với giày dép,
+            túi xách và phụ kiện, thành lập năm 2024.
+            <p>Chúng tôi cung cấp sản phẩm thời trang độc đáo và sáng tạo,
+              mang đến trải nghiệm mua sắm tuyệt vời cho khách hàng.</p>
           </Typography>
         </Box>
 
-        {/* Collapsible Sections for Mobile Only */}
-        {['Follow Us', 'Contact Us'].map((section) => (
-          <Box key={section}>
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              onClick={() => handleToggle(section)}
-              sx={{ cursor: 'pointer', mb: 2 }}
-            >
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: 'bold',
-                  fontSize: { xs: '1rem', md: '1.25rem' },
-                }}
-              >
-                {section}
-              </Typography>
-              {isMobile && (
-                <IconButton size="small">
-                  <ExpandMoreIcon
-                    sx={{
-                      transform: isOpen(section)
-                        ? 'rotate(180deg)'
-                        : 'rotate(0deg)',
-                    }}
-                  />
-                </IconButton>
-              )}
-            </Box>
+        {/* Center Section - Về chúng tôi */}
+        <Box>
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 'bold',
+              fontSize: { xs: '1rem', md: '1.25rem', paddingLeft: '135px' },
+              mb: 2,
+            }}
+          >
+            Về chúng tôi
+          </Typography>
+          <Link href="#" color="text.secondary" sx={{ display: 'block', mb: 1, paddingLeft: '135px' }}>
+            Tài khoản
+          </Link>
+          <Link href="#" color="text.secondary" sx={{ display: 'block', mb: 1, paddingLeft: '135px' }}>
+            Thông tin
+          </Link>
+          <Link href="#" color="text.secondary" sx={{ display: 'block', mb: 1, paddingLeft: '135px' }}>
+            Chính sách bảo mật
+          </Link>
+          <Link href="#" color="text.secondary" sx={{ display: 'block', mb: 1, paddingLeft: '135px' }}>
+            Điều khoản & Điều kiện
+          </Link>
+        </Box>
 
-            {/* Collapse Content - Only collapse on mobile */}
-            <Collapse
-              in={isOpen(section) || !isMobile} // No collapse on large screens
-              timeout="auto"
-              unmountOnExit
-            >
-              {section === 'Follow Us' && (
-                <Box>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ mb: 2, fontSize: { xs: '0.8rem', md: '0.875rem' } }}
-                  >
-                    Since the 1500s, when an unknown printer took a galley of
-                    type and scrambled.
-                  </Typography>
-                  <Link href="#" sx={{ color: '#58c9f3', mr: 2 }}>
-                    Facebook
-                  </Link>
-                  <Link href="#" sx={{ color: '#58c9f3' }}>
-                    Twitter
-                  </Link>
-                </Box>
-              )}
+        {/* Right Section - Liên hệ với chúng tôi */}
+        <Box>
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 'bold',
+              fontSize: { xs: '1rem', md: '1.25rem', paddingLeft: '20px' },
+              mb: 2,
+            }}
+          >
+            Liên hệ với chúng tôi
+          </Typography>
 
-              {section === 'Contact Us' && (
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ fontSize: { xs: '0.8rem', md: '0.875rem' } }}
-                >
-                  E-Comm, 4578 Marmora Road, Glasgow D04 89GR
-                </Typography>
-              )}
-            </Collapse>
+          <Box display="flex" alignItems="center" mb={0.5} paddingLeft='15px'>
+            <IconButton color="primary" sx={{ p: 0, mr: 1 }}>
+              <HomeIcon />
+            </IconButton>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ fontSize: { xs: '0.9rem', md: '0.9rem' } }}
+            >
+              279 Nguyen Tri Phuong, P5, Q10, TPHCM
+            </Typography>
           </Box>
-        ))}
+
+          <Box display="flex" alignItems="center" mb={0.5} paddingLeft='15px'>
+            <IconButton color="primary" sx={{ p: 0, mr: 1 }}>
+              <PhoneIcon />
+            </IconButton>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ fontSize: { xs: '0.9rem', md: '0.9rem' } }}
+            >
+              (+0) 908 023 032
+            </Typography>
+          </Box>
+
+          <Box display="flex" alignItems="center" mb={0.5} paddingLeft='15px'>
+            <IconButton color="primary" sx={{ p: 0, mr: 1 }}>
+              <EmailIcon />
+            </IconButton>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ fontSize: { xs: '0.9rem', md: '0.9rem' } }}
+            >
+              ecomm.contact@gmail.com
+            </Typography>
+          </Box>
+
+          <Box display="flex" gap={1} paddingLeft={4.5}>
+            <IconButton href="#" color="primary">
+              <FacebookIcon />
+            </IconButton>
+            <IconButton href="#" color="primary">
+              <TwitterIcon />
+            </IconButton>
+            <IconButton href="#" color="primary">
+              <InstagramIcon />
+            </IconButton>
+            <IconButton href="#" color="primary">
+              <LinkedInIcon />
+            </IconButton>
+          </Box>
+        </Box>
       </Box>
 
       {/* Footer Bottom Section */}
-      <Box sx={{ textAlign: 'center', mt: 4 }}>
+      <Box sx={{
+        display: 'block',
+        width: '100%',  // Đảm bảo footer chiếm toàn bộ chiều rộng
+        textAlign: 'center',  // Căn giữa văn bản
+        marginTop: 5,
+      }}>
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{ fontSize: { xs: '0.7rem', md: '0.875rem' } }}
+          sx={{ fontSize: { xs: '0.9rem', md: '0.9rem' }, textAlign: 'center' }}
         >
           © 2018 Ecommerce theme by www.bisenbaev.com
         </Typography>
