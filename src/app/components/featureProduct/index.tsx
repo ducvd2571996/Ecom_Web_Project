@@ -75,6 +75,17 @@ export default function FeaturedProducts() {
                 marginBottom: 1,
               }}
             ></Box>
+
+            <Box sx={{ display: 'flex', alignItems: 'center', marginY: 1 }}>
+              <Rating
+                name={`product-rating-${product.productId}`}
+                value={ratings[product.productId] || initialRating} // Display the saved rating or the default
+                precision={0.5}
+                onChange={(event, newRating) => handleRatingChange(product.productId, newRating)}
+                sx={{ fontSize: 16 }} // Adjust the font size of the stars
+              />
+            </Box>
+
             <Typography variant="body2" color="#40BFFF">
               đ{formatPrice(isHaveDiscount ? discountPrice : price)}
               {isHaveDiscount ? (
@@ -99,15 +110,7 @@ export default function FeaturedProducts() {
                 </>
               ) : null}
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', marginY: 1, justifyContent: 'center' }}>
-              <Rating
-                name={`product-rating-${product.productId}`}
-                value={ratings[product.productId] || initialRating} // Display the saved rating or the default
-                precision={0.5}
-                onChange={(event, newRating) => handleRatingChange(product.productId, newRating)}
-                sx={{ fontSize: 16 }} // Adjust the font size of the stars
-              />
-            </Box>
+
           </CardContent>
         </Card>
       </Grid>
@@ -133,8 +136,7 @@ export default function FeaturedProducts() {
       </Typography>
       <Grid container spacing={3} justifyContent="center" marginTop={1}>
         {latestProduct?.map((product) => productItem(product))}
-      </Grid>{/* Rating Section */}
-
+      </Grid>
     </Box>
   );
 }
