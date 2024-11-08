@@ -86,14 +86,16 @@ const Footer: FC = () => {
                 md: '0.9rem',
                 paddingLeft: '30px',
                 paddingRight: '30px',
-                textAlign: 'justify'
-              }
+                textAlign: 'justify',
+              },
             }}
           >
-            Ecomm - doanh nghiệp thời trang độc đáo, sáng tạo với giày dép,
-            túi xách và phụ kiện, thành lập năm 2024.
-            <p>Chúng tôi cung cấp sản phẩm thời trang độc đáo và sáng tạo,
-              mang đến trải nghiệm mua sắm tuyệt vời cho khách hàng.</p>
+            Ecomm - doanh nghiệp thời trang độc đáo, sáng tạo với giày dép, túi
+            xách và phụ kiện, thành lập năm 2024.
+            <p>
+              Chúng tôi cung cấp sản phẩm thời trang độc đáo và sáng tạo, mang
+              đến trải nghiệm mua sắm tuyệt vời cho khách hàng.
+            </p>
           </Typography>
         </Box>
 
@@ -103,22 +105,38 @@ const Footer: FC = () => {
             variant="h6"
             sx={{
               fontWeight: 'bold',
-              fontSize: { xs: '1rem', md: '1.25rem', paddingLeft: '135px' },
+              fontSize: { xs: '1rem', md: '1.25rem', paddingLeft: '20px' },
               mb: 2,
             }}
           >
             Về chúng tôi
           </Typography>
-          <Link href="#" color="text.secondary" sx={{ display: 'block', mb: 1, paddingLeft: '135px' }}>
+          <Link
+            href="#"
+            color="text.secondary"
+            sx={{ display: 'block', mb: 1, paddingLeft: '20px' }}
+          >
             Tài khoản
           </Link>
-          <Link href="#" color="text.secondary" sx={{ display: 'block', mb: 1, paddingLeft: '135px' }}>
+          <Link
+            href="#"
+            color="text.secondary"
+            sx={{ display: 'block', mb: 1, paddingLeft: '20px' }}
+          >
             Thông tin
           </Link>
-          <Link href="#" color="text.secondary" sx={{ display: 'block', mb: 1, paddingLeft: '135px' }}>
+          <Link
+            href="#"
+            color="text.secondary"
+            sx={{ display: 'block', mb: 1, paddingLeft: '20px' }}
+          >
             Chính sách bảo mật
           </Link>
-          <Link href="#" color="text.secondary" sx={{ display: 'block', mb: 1, paddingLeft: '135px' }}>
+          <Link
+            href="#"
+            color="text.secondary"
+            sx={{ display: 'block', mb: 1, paddingLeft: '20px' }}
+          >
             Điều khoản & Điều kiện
           </Link>
         </Box>
@@ -136,7 +154,7 @@ const Footer: FC = () => {
             Liên hệ với chúng tôi
           </Typography>
 
-          <Box display="flex" alignItems="center" mb={0.5} paddingLeft='15px'>
+          <Box display="flex" alignItems="center" mb={0.5} paddingLeft="15px">
             <IconButton color="primary" sx={{ p: 0, mr: 1 }}>
               <HomeIcon />
             </IconButton>
@@ -149,7 +167,7 @@ const Footer: FC = () => {
             </Typography>
           </Box>
 
-          <Box display="flex" alignItems="center" mb={0.5} paddingLeft='15px'>
+          <Box display="flex" alignItems="center" mb={0.5} paddingLeft="15px">
             <IconButton color="primary" sx={{ p: 0, mr: 1 }}>
               <PhoneIcon />
             </IconButton>
@@ -162,7 +180,7 @@ const Footer: FC = () => {
             </Typography>
           </Box>
 
-          <Box display="flex" alignItems="center" mb={0.5} paddingLeft='15px'>
+          <Box display="flex" alignItems="center" mb={0.5} paddingLeft="15px">
             <IconButton color="primary" sx={{ p: 0, mr: 1 }}>
               <EmailIcon />
             </IconButton>
@@ -193,12 +211,14 @@ const Footer: FC = () => {
       </Box>
 
       {/* Footer Bottom Section */}
-      <Box sx={{
-        display: 'block',
-        width: '100%',  // Đảm bảo footer chiếm toàn bộ chiều rộng
-        textAlign: 'center',  // Căn giữa văn bản
-        marginTop: 5,
-      }}>
+      <Box
+        sx={{
+          display: 'block',
+          width: '100%', // Đảm bảo footer chiếm toàn bộ chiều rộng
+          textAlign: 'center', // Căn giữa văn bản
+          marginTop: 5,
+        }}
+      >
         <Typography
           variant="body2"
           color="text.secondary"
