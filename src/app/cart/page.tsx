@@ -18,7 +18,6 @@ import {
   Divider,
   IconButton,
   Stack,
-  TextField,
   Typography,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
@@ -52,10 +51,6 @@ const CartPage = () => {
   useEffect(() => {
     setCart(cart || {});
   }, [cart]);
-
-  const pricePerItem = 1000000; // Product price
-  const shippingFee = 20000; // Shipping fee
-  const coupon = 0; // Discount (if any)
 
   const updateCartQuantity = (
     index: number,
@@ -151,10 +146,7 @@ const CartPage = () => {
   // Điều hướng đến trang thanh toán
   const handleCheckoutClick = () => {
     const query = new URLSearchParams({
-      quantities: JSON.stringify(1),
-      pricePerItem: pricePerItem.toString(),
-      shippingFee: shippingFee.toString(),
-      coupon: coupon.toString(),
+      cart: JSON.stringify(localCart),
     }).toString();
     router.push(`/payment?${query}`);
   };
@@ -301,7 +293,6 @@ const CartPage = () => {
                 })}
               </Stack>
 
-              {/* Remove Product Confirmation Dialog */}
               <Dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
                 <DialogTitle>
                   <Box display="flex" alignItems="center">
@@ -329,10 +320,9 @@ const CartPage = () => {
               </Dialog>
             </Box>
 
-            {/* Right Column (1/3 width) */}
             <Box flex={1} marginTop="2px">
               {/* Voucher Code Section */}
-              <Box display="flex" alignItems="center" marginBottom="32px">
+              {/* <Box display="flex" alignItems="center" marginBottom="32px">
                 <TextField
                   label="Nhập mã voucher"
                   variant="outlined"
@@ -342,7 +332,7 @@ const CartPage = () => {
                 <Button variant="contained" color="primary">
                   Sử dụng
                 </Button>
-              </Box>
+              </Box> */}
 
               {/* Summary Section */}
               <Box
