@@ -27,6 +27,7 @@ import {
   getCartHanlder,
   updateCartHanlder,
 } from '../cart/store/reducers/cart';
+import { Rating } from '@mui/material';
 
 const ProductDetailPage = () => {
   const [size, setSize] = useState('XS');
@@ -133,6 +134,20 @@ const ProductDetailPage = () => {
             <Typography sx={{ fontWeight: 'bold' }} variant="h4">
               {productDetail?.name}
             </Typography>
+
+            {/* Icons container */}
+            <Box sx={{ display: 'flex', alignItems: 'center', marginY: 1 }}>
+              <Rating
+                name="product-rating"
+                value={4} // Giá trị rating mặc định hoặc lấy từ props nếu có
+                precision={0.5}
+                readOnly
+              />
+              <Typography variant="body2" sx={{ marginLeft: 1 }}>
+                (100 đánh giá) {/* Số lượng đánh giá, có thể cập nhật từ props */}
+              </Typography>
+            </Box>
+
             <Divider
               sx={{
                 width: { xs: '100%', sm: '600px' }, // Full width on small screens, 600px on larger screens
