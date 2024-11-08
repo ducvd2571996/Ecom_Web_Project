@@ -6,7 +6,6 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import OrderIcon from '@mui/icons-material/ListAlt';
-import ContactMailIcon from '@mui/icons-material/ContactMail';
 import {
   AppBar,
   Badge,
@@ -21,6 +20,7 @@ import {
   Paper,
   Toolbar,
   Typography,
+  Button,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/navigation';
@@ -72,6 +72,7 @@ const Header: React.FC = () => {
   const userData = localStorage.getItem('user');
   const cachedUser = userData ? JSON.parse(userData) : null;
   const router = useRouter();
+  
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -147,10 +148,6 @@ const Header: React.FC = () => {
     setSearchResults(filteredResults);
   };
 
-  const handleContactClick = () => {
-    window.location.href = '/contact';
-  };
-
   return (
     <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar
@@ -184,6 +181,15 @@ const Header: React.FC = () => {
             E-Comm
           </Typography>
         </Link>
+
+        {/* Navigation Buttons */}
+        <Box sx={{ display: 'flex', gap: 3 }}>
+          <Button component={Link} href="/" color="inherit">Trang Chủ</Button>
+          <Button component={Link} href="/productList?category=tui-xach" color="inherit">Túi Xách</Button>
+          <Button component={Link} href="/productList?category=sneaker" color="inherit">Sneaker</Button>
+          <Button component={Link} href="/productList?category=phu-kien" color="inherit">Phụ Kiện</Button>
+          <Button component={Link} href="/contact" color="inherit">Liên Hệ</Button>
+        </Box>
 
         {/* Right Section - Profile, Cart, Search */}
         <Box
@@ -267,60 +273,42 @@ const Header: React.FC = () => {
           )}
 
           <IconButton onClick={handleCartClick}>
-            <Badge badgeContent={localAmount} color="secondary">
+            <Badge badgeContent={localAmount} color="primary">
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
 
-          <IconButton onClick={handleContactClick}>
-            <ContactMailIcon color="primary" />
-          </IconButton>
-
-          {/* Search Icon Button */}
-          <IconButton sx={{ marginRight: -5 }} onClick={handleSearchClick}>
-            <SearchIcon />
-          </IconButton>
-
-          {/* Search Bar */}
-          {searchOpen && (
-            <Search>
-              <SearchInput
-                placeholder="Tìm kiếm..."
-                inputProps={{ 'aria-label': 'search' }}
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-              {searchResults.length > 0 && (
-                <ResultsList>
-                  {searchResults.map((result, index) => (
-                    <Typography
-                      key={index}
-                      sx={{
-                        padding: 1,
-                        cursor: 'pointer',
-                        '&:hover': { backgroundColor: '#f0f0f0' },
-                      }}
-                      onClick={() => {
-                        setSearchQuery(result);
-                        setSearchResults([]);
-                      }}
-                    >
-                      {result}
-                    </Typography>
-                  ))}
-                </ResultsList>
-              )}
-            </Search>
-          )}
+          <Search>
+            <SearchInput
+              placeholder="Tìm kiếm sản phẩm..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              onClick={handleSearchClick}
+            />
+            <IconButton
+              type="button"
+              sx={{
+                position: 'absolute',
+                right: 0,
+                top: '50%',
+                transform: 'translateY(-50%)',
+              }}
+            >
+              <SearchIcon />
+            </IconButton>
+            {searchResults.length > 0 && (
+              <ResultsList>
+                {searchResults.map((result, index) => (
+                  <Typography key={index} sx={{ padding: 1 }}>
+                    {result}
+                  </Typography>
+                ))}
+              </ResultsList>
+            )}
+          </Search>
         </Box>
       </Toolbar>
-
-      <Divider
-        sx={{
-          width: { xs: '100%' },
-          backgroundColor: '#F6F7F8',
-        }}
-      />
+      <Divider />
     </AppBar>
   );
 };
