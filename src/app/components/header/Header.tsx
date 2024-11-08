@@ -65,7 +65,6 @@ const Header: React.FC = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<string[]>([]);
-  const [user, setUser] = useState(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [localAmount, setLocalAmount] = useState(0);
   const amount = useSelector((state: RootState) => state.cart?.amount);
@@ -101,10 +100,6 @@ const Header: React.FC = () => {
     'Blueberry',
     'Raspberry',
   ];
-
-  useEffect(() => {
-    setUser(cachedUser?.userInfo);
-  }, [cachedUser?.userInfo]);
 
   const handleCartClick = () => {
     window.location.href = '/cart';
@@ -204,7 +199,7 @@ const Header: React.FC = () => {
             },
           }}
         >
-          {!user ? (
+          {!cachedUser ? (
             <Box display={'flex'}>
               <Typography
                 onClick={gotoRegister}

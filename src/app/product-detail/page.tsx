@@ -22,6 +22,7 @@ import { getProductDetailHanlder } from './store/reducers/get-product-detail';
 import { RootState } from '../store/store';
 import { formatPrice } from '@/helper/formatString/format-price';
 import { CreateCartDTO } from '../model/cart.model';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import {
   createCartHanlder,
   getCartHanlder,
@@ -286,7 +287,13 @@ const ProductDetailPage = () => {
               <Button
                 onClick={onHandleAddToCart}
                 variant="contained"
-                color="primary"
+                sx={{ 
+                  backgroundColor: '#ebf6ff', 
+                  color: '#3baafd',
+                  textTransform: 'none',
+                  fontSize: '16px'
+                }}
+                startIcon={<ShoppingCartIcon />}
               >
                 Thêm vào giỏ hàng
               </Button>
@@ -299,14 +306,15 @@ const ProductDetailPage = () => {
                   marginLeft: 5,
                   paddingX: 2,
                   borderRadius: 2,
-                  border: '1px solid #33A0FF',
+                  backgroundColor: '#ebf6ff',
+                  variant: 'contained'
                 }}
               >
                 <IconButton onClick={handleFavoriteToggle}>
                   {isInWishList ? (
                     <FavoriteIcon color="error" />
                   ) : (
-                    <FavoriteBorderIcon sx={{ color: '#33A0FF' }} />
+                    <FavoriteBorderIcon sx={{ color: '#3baafd' }} />
                   )}
                 </IconButton>
               </Box>
