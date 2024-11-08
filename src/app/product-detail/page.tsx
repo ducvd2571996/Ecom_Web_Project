@@ -34,15 +34,22 @@ const ProductDetailPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const [rating, setRating] = useState<number | null>(null); // Thay giá trị mặc định là null để khi render lại sẽ lấy từ storage
 
+  const searchParams = useSearchParams();
   const id = searchParams.get('id'); // Get the 'id' query parameter
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getProductDetailHanlder(id));
-  }, []);
+
+    // Kiểm tra xem rating đã được lưu trong localStorage chưa
+    const storedRating = localStorage.getItem(`rating-${id}`);
+    if (storedRating) {
+      setRating(Number(storedRating)); // Nếu có, đặt giá trị rating từ localStorage
+    }
+  }, [id]);
 
   const { productDetail } = useSelector(
     (state: RootState) => state.productDetail
@@ -59,6 +66,15 @@ const ProductDetailPage = () => {
 
   const handleFavoriteToggle = () => {
     setIsFavorite((prev) => !prev);
+  };
+
+  // Hàm xử lý khi người dùng thay đổi rating
+  const handleRatingChange = (event: React.ChangeEvent<{}>, newRating: number | null) => {
+    if (newRating !== null) {
+      setRating(newRating);
+      // Lưu rating vào localStorage để duy trì giá trị khi người dùng quay lại
+      localStorage.setItem(`rating-${id}`, String(newRating));
+    }
   };
 
   const price = productDetail?.price || 0;
@@ -136,16 +152,14 @@ const ProductDetailPage = () => {
             </Typography>
 
             {/* Icons container */}
-            <Box sx={{ display: 'flex', alignItems: 'center', marginY: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', marginY: 1, justifyContent: 'center' }}>
               <Rating
                 name="product-rating"
-                value={4} // Giá trị rating mặc định hoặc lấy từ props nếu có
+                value={rating || 5} // Hiển thị giá trị rating đã lưu hoặc mặc định là 5
                 precision={0.5}
-                readOnly
+                onChange={handleRatingChange}
+                sx={{ fontSize: 16 }} // Thay đổi kích thước của các sao
               />
-              <Typography variant="body2" sx={{ marginLeft: 1 }}>
-                (100 đánh giá) {/* Số lượng đánh giá, có thể cập nhật từ props */}
-              </Typography>
             </Box>
 
             <Divider

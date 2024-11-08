@@ -47,6 +47,8 @@ const ProductItem = ({
   const [hovered, setHovered] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const dispatch = useDispatch();
+  const [rating, setRating] = useState<number | null>(5); // Giá trị mặc định là 5
+
   const handleFavoriteToggle = () => {
     setIsFavorite((prev) => !prev);
   };
@@ -101,6 +103,15 @@ const ProductItem = ({
     } else {
       const url = `/login`;
       router.push(url);
+    }
+  };
+
+  // Hàm xử lý khi người dùng thay đổi rating
+  const handleRatingChange = (event: React.ChangeEvent<{}>, newRating: number | null) => {
+    if (newRating !== null) {
+      setRating(newRating);
+      // Lưu rating vào localStorage để duy trì giá trị khi người dùng quay lại
+      localStorage.setItem(`rating-${id}`, String(newRating));
     }
   };
 
@@ -190,16 +201,14 @@ const ProductItem = ({
           </Typography>
 
           {/* Icons container */}
-          <Box sx={{ display: 'flex', alignItems: 'center', marginY: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', marginY: 1, justifyContent: 'center' }}>
             <Rating
               name="product-rating"
-              value={4} // Giá trị rating mặc định hoặc lấy từ props nếu có
+              value={rating || 5} // Hiển thị giá trị rating đã lưu hoặc mặc định là 5
               precision={0.5}
-              readOnly
+              onChange={handleRatingChange}
+              sx={{ fontSize: 16 }} // Thay đổi kích thước của các sao
             />
-            <Typography variant="body2" sx={{ marginLeft: 1 }}>
-              (100 đánh giá) {/* Số lượng đánh giá, có thể cập nhật từ props */}
-            </Typography>
           </Box>
 
           <Typography variant="body2" color="#40BFFF">
