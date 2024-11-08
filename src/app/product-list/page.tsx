@@ -5,7 +5,7 @@ import AdidasBanner from '../components/adidasBanner';
 import ProductList from '../components/productList';
 import ProductFilter from '../components/prouductFilter';
 
-export default function Home() {
+export default function ProductListPage() {
   return (
     <Box sx={{ marginTop: 2 }}>
       <AdidasBanner shoeRatio="30%" height={300} isHideButton />

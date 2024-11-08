@@ -48,7 +48,7 @@ function* updateCartSaga(action: ActionType): Generator<any, void, DataType> {
       callback?.(rs);
     }
   } catch (error: any) {
-    callback(error?.response?.data);
+    callback?.(error?.response?.data);
   }
 }
 

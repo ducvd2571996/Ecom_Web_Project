@@ -117,6 +117,14 @@ const Header: React.FC = () => {
     window.location.href = '/login';
   };
 
+  const gotoOrder = () => {
+    window.location.href = '/order';
+  };
+
+  const gotoWishList = () => {
+    window.location.href = '/wish-list';
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -236,13 +244,13 @@ const Header: React.FC = () => {
                   </ListItemIcon>
                   Thông tin cá nhân
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={gotoWishList}>
                   <ListItemIcon>
                     <FavoriteIcon fontSize="small" />
                   </ListItemIcon>
                   Sản phẩm yêu thích
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={gotoOrder}>
                   <ListItemIcon>
                     <OrderIcon fontSize="small" />
                   </ListItemIcon>

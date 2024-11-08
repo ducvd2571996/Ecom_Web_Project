@@ -23,7 +23,7 @@ import { useRouter, useSearchParams } from 'next/navigation'; // Sử dụng use
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Product } from '../model/cart.model';
-import { Order } from '../model/order.model';
+import { CreateOrder, Order } from '../model/order.model';
 import { RootState } from '../store/store';
 import { createOrdertHanlder } from './store/reducers/payment';
 import { makeStyles } from '@mui/styles';
@@ -125,7 +125,7 @@ const Payment = () => {
     if (Object.keys(newErrors).length === 0) {
       // Nếu không có lỗi, thực hiện đặt hàng
       // setSuccess(true);
-      const order: Order = {
+      const order: CreateOrder = {
         cartId: parsedCart?.id,
         customerId: parsedCart?.customerId,
         orderStatus: 'NEW',
