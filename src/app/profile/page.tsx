@@ -79,7 +79,7 @@ const ProfilePage = () => {
 
         {/* Grid chứa các thông tin */}
         <Grid container spacing={2} sx={{ mt: 4, paddingLeft: 8 }}>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <Typography paddingLeft={1} variant="body2" color="textSecondary">
               Giới tính
             </Typography>
@@ -96,7 +96,7 @@ const ProfilePage = () => {
             </Box>
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <Typography paddingLeft={1} variant="body2" color="textSecondary">
               Ngày sinh
             </Typography>
@@ -113,7 +113,7 @@ const ProfilePage = () => {
             </Box>
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <Typography paddingLeft={1} variant="body2" color="textSecondary">
               Địa chỉ
             </Typography>
@@ -130,7 +130,7 @@ const ProfilePage = () => {
             </Box>
 
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <Typography marginLeft={1} variant="body2" color="textSecondary">
               Email
             </Typography>
@@ -146,7 +146,7 @@ const ProfilePage = () => {
             </Box>
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <Typography paddingLeft={1} variant="body2" color="textSecondary">
               Số điện thoại
             </Typography>
@@ -163,7 +163,7 @@ const ProfilePage = () => {
             </Box>
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <Typography paddingLeft={1} variant="body2" color="textSecondary">
               Mật khẩu
             </Typography>
