@@ -10,7 +10,7 @@ const ProfilePage = () => {
     username: '@dominic_ovo',
     gender: 'Nam',
     dob: '12-12-2000',
-    address: 'TP.Hồ Chí Minh',
+    address: 'TP. Hồ Chí Minh',
     email: 'rex4dom@gmail.com',
     phone: '(307) 555-0133',
     password: '********',
@@ -71,32 +71,48 @@ const ProfilePage = () => {
           </Box>
           {/* Nút Edit ở góc phải */}
           <Box sx={{ position: 'absolute', top: 5, right: 16 }}>
-            <Button variant="outlined" color="primary">
+            <Button variant="contained" color="primary">
               Edit
             </Button>
           </Box>
-        </Box>
-        {/* Nút Edit ở góc phải */}
-        <Box sx={{ position: 'absolute', top: 5, right: 16 }}>
-          <Button variant="contained" color="primary">
-            Edit
-          </Button>
         </Box>
 
         {/* Grid chứa các thông tin */}
         <Grid container spacing={2} sx={{ mt: 4, paddingLeft: 8 }}>
           <Grid item xs={6}>
-            <Typography variant="body2" color="textSecondary">
+            <Typography paddingLeft={1} variant="body2" color="textSecondary">
               Giới tính
             </Typography>
-            <Typography variant="subtitle1">{user.gender}</Typography>
+
+            <Box
+              sx={{
+                backgroundColor: '#F9F9F9',
+                borderRadius: 1,
+                paddingLeft: 1,
+                marginRight: 2,
+              }}
+            >
+              <Typography variant="subtitle1">{user.gender}</Typography>
+            </Box>
           </Grid>
+
           <Grid item xs={6}>
-            <Typography variant="body2" color="textSecondary">
+            <Typography paddingLeft={1} variant="body2" color="textSecondary">
               Ngày sinh
             </Typography>
-            <Typography variant="subtitle1">{user.dob}</Typography>
+
+            <Box
+              sx={{
+                backgroundColor: '#F9F9F9',
+                borderRadius: 1,
+                paddingLeft: 1,
+                marginRight: 2,
+              }}
+            >
+              <Typography variant="subtitle1">{user.dob}</Typography>
+            </Box>
           </Grid>
+
           <Grid item xs={6}>
             <Typography paddingLeft={1} variant="body2" color="textSecondary">
               Địa chỉ
@@ -112,12 +128,13 @@ const ProfilePage = () => {
             >
               <Typography variant="subtitle1">{user.address}</Typography>
             </Box>
-            
+
           </Grid>
           <Grid item xs={6}>
             <Typography marginLeft={1} variant="body2" color="textSecondary">
               Email
             </Typography>
+
             <Box
               sx={{
                 backgroundColor: '#F9F9F9',
@@ -128,17 +145,39 @@ const ProfilePage = () => {
               <Typography variant="subtitle1">{user.email}</Typography>
             </Box>
           </Grid>
+
           <Grid item xs={6}>
-            <Typography variant="body2" color="textSecondary">
+            <Typography paddingLeft={1} variant="body2" color="textSecondary">
               Số điện thoại
             </Typography>
-            <Typography variant="subtitle1">{user.phone}</Typography>
+
+            <Box
+              sx={{
+                backgroundColor: '#F9F9F9',
+                borderRadius: 1,
+                paddingLeft: 1,
+                marginRight: 2,
+              }}
+            >
+              <Typography variant="subtitle1">{user.phone}</Typography>
+            </Box>
           </Grid>
+
           <Grid item xs={6}>
-            <Typography variant="body2" color="textSecondary">
+            <Typography paddingLeft={1} variant="body2" color="textSecondary">
               Mật khẩu
             </Typography>
-            <Typography variant="subtitle1">{user.password}</Typography>
+
+            <Box
+              sx={{
+                backgroundColor: '#F9F9F9',
+                borderRadius: 1,
+                paddingLeft: 1,
+                marginRight: 2,
+              }}
+            >
+              <Typography variant="subtitle1">{user.password}</Typography>
+            </Box>
           </Grid>
         </Grid>
       </Paper>
