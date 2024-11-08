@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
 import { call, put } from 'redux-saga/effects';
-import { createOrdertSuccess, createOrdertFailure } from '../reducers/payment';
-import { Order } from '@/app/model/order.model';
+import { getOrderListFailure, getOrderListSuccess } from '../reducers/payment';
 
 interface DataType {
+  data: any;
   status: number;
   message: string;
 }
@@ -14,13 +14,10 @@ interface ActionType {
   payload: any;
 }
 
-const createOrderApi = async (order: Order) => {
+const fetchOrdersApi = async (customerId: number) => {
   const token = localStorage.getItem('token');
-  const response = await axios.post(
-    'http://127.0.0.1:3005/pos/orders',
-    {
-      ...order,
-    },
+  const response = await axios.get(
+    `http://127.0.0.1:3005/pos/orders/get-by-customer/${customerId}`,
     {
       headers: {
         Authorization: `Bearer ${token}`, // Pass the token in the Authorization header
@@ -31,19 +28,18 @@ const createOrderApi = async (order: Order) => {
   return response.data; // Assuming data contains the product list
 };
 
-function* createOrderSaga(action: ActionType): Generator<any, void, DataType> {
+function* getOrdersSaga(action: ActionType): Generator<any, void, DataType> {
   try {
-    const rs = yield call(createOrderApi, action?.payload?.order);
+    const rs = yield call(fetchOrdersApi, action?.payload);
     if (rs?.status === 200) {
-      yield put(createOrdertSuccess());
-      action?.payload?.callback();
+      yield put(getOrderListSuccess(rs?.data));
     } else {
-      yield put(createOrdertFailure());
+      yield put(getOrderListFailure());
     }
   } catch (error) {
     console.log('errr', error);
-    yield put(createOrdertFailure());
+    yield put(getOrderListFailure());
   }
 }
 
-export default createOrderSaga;
+export default getOrdersSaga;

@@ -8,9 +8,8 @@ import { Box, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import { getBrandsHanlder } from './product-list/store/reducers/get-brands';
-import { fetchUserRequest, getCateListHanlder } from './store/reducers';
 import { getCartHanlder } from './cart/store/reducers/cart';
+import { fetchUserRequest } from './store/reducers';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -30,7 +29,7 @@ export default function Home() {
   useEffect(() => {
     if (cachedUser?.userInfo?.userId) {
       dispatch(getCartHanlder({ userId: cachedUser?.userInfo?.id }));
-      dispatch(fetchUserRequest(cachedUser?.userInfo?.userId));
+      dispatch(fetchUserRequest(cachedUser?.userInfo?.id));
     }
   }, [cachedUser?.userInfo?.userId, dispatch]); // Only re-run if userId changes
 

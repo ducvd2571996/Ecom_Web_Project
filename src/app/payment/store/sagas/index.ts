@@ -1,7 +1,9 @@
 import { takeLatest } from 'redux-saga/effects';
-import { getProductDetailHanlder } from '../reducers/create-order';
-import getProductDetailSaga from './create-order';
+import { createOrdertHanlder, getOrderListHanlder } from '../reducers/payment';
+import createOrderSaga from './create-order';
+import getOrdersSaga from './get-order';
 
-export default function* productDetailSaga() {
-  yield takeLatest(getProductDetailHanlder.type, getProductDetailSaga);
+export default function* paymentSaga() {
+  yield takeLatest(createOrdertHanlder.type, createOrderSaga);
+  yield takeLatest(getOrderListHanlder.type, getOrdersSaga);
 }

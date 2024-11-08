@@ -1,51 +1,87 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import React, { useState } from 'react';
+import { formatPrice } from '@/helper/formatString/format-price';
 import {
   Box,
-  Typography,
-  TextField,
   Button,
-  Divider,
+  CardMedia,
   Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
   FormControlLabel,
   Radio,
   RadioGroup,
-  Alert,
-  CardMedia,
+  Slide,
+  TextField,
+  Typography,
 } from '@mui/material';
-import { useSearchParams } from 'next/navigation'; // Sử dụng useSearchParams từ next/navigation
-import { useRouter } from 'next/navigation'; // Import useRouter
-import { formatPrice } from '@/helper/formatString/format-price';
+import { useRouter, useSearchParams } from 'next/navigation'; // Sử dụng useSearchParams từ next/navigation
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Product } from '../model/cart.model';
+import { Order } from '../model/order.model';
+import { RootState } from '../store/store';
+import { createOrdertHanlder } from './store/reducers/payment';
+import { makeStyles } from '@mui/styles';
+import { getCartHanlder } from '../cart/store/reducers/cart';
+
+const useStyles = makeStyles((theme: any) => ({
+  dialogPaper: {
+    background: 'linear-gradient(135deg, #03A9F4, #FB7181)', // Beautiful gradient background
+    borderRadius: 20,
+    padding: theme.spacing(3),
+  },
+  dialogTitle: {
+    textAlign: 'center',
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  dialogContent: {
+    textAlign: 'center',
+    color: '#fff',
+  },
+  button: {
+    backgroundColor: '#fff',
+    color: '#FF7E5F',
+    fontSize: '1rem',
+    fontWeight: 'bold',
+    '&:hover': {
+      backgroundColor: '#feb47b',
+      color: '#fff',
+    },
+    borderRadius: '50px',
+    padding: '10px 30px',
+  },
+}));
 
 const Payment = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const dispatch = useDispatch();
 
   // Define the shape of your form values
   interface FormValues {
     name: string;
-    companyName: string;
-    street: string;
-    houseNumber: string;
-    city: string;
+    address: string;
     phone: string;
     email: string;
   }
 
   const [formValues, setFormValues] = useState<FormValues>({
     name: '',
-    companyName: '',
-    street: '',
-    houseNumber: '',
-    city: '',
+    address: '',
     phone: '',
     email: '',
   });
   const [errors, setErrors] = useState<Record<string, boolean>>({}); // Update the type for errors
   const [success, setSuccess] = useState(false);
-
+  const [openDialog, setOpenDialog] = useState(false);
+  const classes = useStyles();
+  const { loading } = useSelector((state: RootState) => state.payment);
   // Lấy tham số từ URL
   const cart = searchParams.get('cart');
 
@@ -63,8 +99,7 @@ const Payment = () => {
   const handleOrder = () => {
     const requiredFields: Array<keyof FormValues> = [
       'name',
-      'street',
-      'city',
+      'address',
       'phone',
       'email',
     ];
@@ -89,16 +124,44 @@ const Payment = () => {
 
     if (Object.keys(newErrors).length === 0) {
       // Nếu không có lỗi, thực hiện đặt hàng
-      setSuccess(true);
-      console.log('Đặt hàng thành công');
+      // setSuccess(true);
+      const order: Order = {
+        cartId: parsedCart?.id,
+        customerId: parsedCart?.customerId,
+        orderStatus: 'NEW',
+        paymentMethod: '1',
+        name: formValues?.name,
+        address: formValues?.address,
+        email: formValues?.email,
+        phoneNumber: formValues?.phone,
+        totalPrice: parsedCart?.totalPrice,
+        subTotal: parsedCart?.subTotal,
+        discountTotal: parsedCart?.discountTotal,
+        products: parsedCart?.products,
+      };
+      dispatch(
+        createOrdertHanlder({
+          order,
+          callback: () => {
+            dispatch(getCartHanlder({ userId: parsedCart?.customerId }));
+            setOpenDialog(true);
+          },
+        })
+      );
+
       // Quay về trang chủ sau 2 giây
-      setTimeout(() => {
-        router.push('/'); // Điều hướng về trang chủ
-      }, 2000);
+      // setTimeout(() => {
+      //   router.push('/'); // Điều hướng về trang chủ
+      // }, 2000);
     } else {
       // Reset success state if there are errors
       setSuccess(false);
     }
+  };
+
+  const handleContinueShopping = () => {
+    setOpenDialog(false); // Close the dialog
+    router.push('/'); // Navigate to the homepage or product list
   };
 
   return (
@@ -133,16 +196,13 @@ const Payment = () => {
           {/* User Information Fields */}
           {[
             { label: 'Họ tên', name: 'name' },
-            { label: 'Tên đường', name: 'street' },
-            { label: 'Số nhà, tên tòa nhà,...', name: 'houseNumber' },
-            { label: 'Tỉnh/Thành phố', name: 'city' },
+            { label: 'Địa chỉ', name: 'address' },
             { label: 'Số điện thoại', name: 'phone' },
             { label: 'Địa chỉ email', name: 'email' },
           ].map(({ label, name }, index) => {
             const isRequired = [
               'Họ tên',
-              'Tên đường',
-              'Tỉnh/Thành phố',
+              'Địa chỉ',
               'Số điện thoại',
               'Địa chỉ email',
             ].includes(label);
@@ -328,21 +388,47 @@ const Payment = () => {
 
           {/* Order Button */}
           <Button
+            disabled={loading}
             variant="contained"
             color="primary"
-            sx={{ marginTop: 2, width: '130px', fontSize: '1.0rem' }} // Điều chỉnh chiều rộng
+            sx={{ marginTop: 2, width: '200px', fontSize: '1.0rem' }} // Điều chỉnh chiều rộng
             onClick={handleOrder}
           >
-            Đặt hàng
+            {loading ? ' Đang đặt hàng...' : 'Đặt hàng'}
           </Button>
-          {/* Display success message */}
-          {success && (
-            <Alert severity="success" sx={{ mb: 2 }}>
-              Đặt hàng thành công!
-            </Alert>
-          )}
         </Box>
       </Box>
+
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        TransitionComponent={(props) => <Slide direction="up" {...props} />}
+        PaperProps={{
+          className: classes.dialogPaper,
+        }}
+      >
+        <DialogTitle className={classes.dialogTitle}>
+          Thanh toán thành công!
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="h6" className={classes.dialogContent}>
+              Cảm ơn bạn đã mua sắm tại cửa hàng chúng tôi. Đơn hàng của bạn đã
+              được xác nhận thành công!
+            </Typography>
+            <Button
+              sx={{ marginTop: 3 }}
+              className={classes.button}
+              onClick={handleContinueShopping}
+            >
+              Tiếp tục mua sắm
+            </Button>
+          </Box>
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: 'center' }}>
+          {/* Optionally you can add more actions */}
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

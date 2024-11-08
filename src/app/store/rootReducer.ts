@@ -7,6 +7,7 @@ import brandsReducer from '../product-list/store/reducers/get-brands';
 import registerReducer from '../register/store/reducers/register';
 import loginReducer from '../login/store/reducers/login';
 import cartReducer from '../cart/store/reducers/cart';
+import paymentReducer from '../payment/store/reducers/payment';
 
 import latestProductReducer from './reducers/get-latest-product';
 import productDetailReducer from '../product-detail/store/reducers/get-product-detail';
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   login: loginReducer,
   productDetail: productDetailReducer,
   cart: cartReducer,
+  payment: paymentReducer,
 });
 
 export default rootReducer;

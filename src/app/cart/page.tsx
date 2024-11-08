@@ -146,7 +146,10 @@ const CartPage = () => {
   // Điều hướng đến trang thanh toán
   const handleCheckoutClick = () => {
     const query = new URLSearchParams({
-      cart: JSON.stringify(localCart),
+      cart: JSON.stringify({
+        ...localCart,
+        customerId: cachedUser?.userInfo?.id,
+      }),
     }).toString();
     router.push(`/payment?${query}`);
   };
