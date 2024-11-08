@@ -74,7 +74,7 @@ const Header: React.FC = () => {
 
   const handleProfileClick = () => {
     // Navigate to profile details or perform profile-related actions
-    console.log('Profile clicked');
+    router.push('/profile'); // Điều hướng đến trang ProfilePage
     handleClose();
   };
 
