@@ -16,11 +16,22 @@ import { getBrandsHanlder } from '@/app/product-list/store/reducers/get-brands';
 import { getProductListHanlder } from '@/app/product-list/store/reducers/get-product';
 import { formatPrice } from '@/helper/formatString/format-price';
 
+const colors = [
+  { id: 1, color: 'blue' },
+  { id: 2, color: 'red' },
+  { id: 3, color: 'black' },
+  { id: 4, color: 'yellow' },
+  { id: 5, color: 'pink' },
+  { id: 6, color: 'grey' },
+];
+
 const ProductFilter: React.FC = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000000]);
   const [selectedBrand, setSelectedBrand] = useState<number | null>(null);
   const [selectedCate, setSelectedCate] = useState<number | null>(null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const dispatch = useDispatch();
+
   const handlePriceChange = (event: Event, newValue: number | number[]) => {
     setPriceRange(newValue as [number, number]);
   };
@@ -41,7 +52,7 @@ const ProductFilter: React.FC = () => {
         <Typography variant="h6" gutterBottom>
           Giá tiền
         </Typography>
-        <Typography variant="body1">Khoảng giá:</Typography>
+        <Typography variant="body1" paddingBottom={2} fontSize={16}>Khoảng giá:</Typography>
         <Typography variant="body1">
           đ{formatPrice(priceRange[0])} - đ{formatPrice(priceRange[1])}
         </Typography>
@@ -137,6 +148,30 @@ const ProductFilter: React.FC = () => {
             </ListItem>
           ))}
         </List>
+      </Paper>
+
+      {/* Color Section */}
+      <Paper sx={{padding: 2, backgroundColor: '#F6F7F8', marginTop: 3 }}>
+        <Typography variant="h6" paddingBottom={2} gutterBottom>
+          Màu sắc
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          {colors.map((color) => (
+            <Box
+              key={color.id}
+              onClick={() => setSelectedColor(color.color)}
+              sx={{
+                width: 24,
+                height: 20,
+                borderRadius: '50%',
+                backgroundColor: color.color,
+                cursor: 'pointer',
+                border: selectedColor === color.color ? '2px solid black' : '2px solid transparent',
+                transition: 'border 0.3s',
+              }}
+            />
+          ))}
+        </Box>
       </Paper>
     </Box>
   );
