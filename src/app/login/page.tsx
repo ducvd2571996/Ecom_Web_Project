@@ -21,6 +21,7 @@ import { RootState } from '../store/store';
 import { loginHanlder } from './store/reducers/login';
 import { isValidPassword, isValidPhone } from '@/helper/verifyInput';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+
 export default function LoginPage() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -31,6 +32,7 @@ export default function LoginPage() {
   const { loading } = useSelector((state: RootState) => state.register);
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const handleTogglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -39,7 +41,6 @@ export default function LoginPage() {
   const handlePasswordChange = (event: any) => {
     const newPassword = event.target.value;
     setPassword(newPassword);
-
     setError(!isValidPassword(newPassword));
   };
 
@@ -61,7 +62,7 @@ export default function LoginPage() {
       })
     );
   };
-  const router = useRouter();
+
   const gotoRegister = () => {
     router.push('/register');
   };
@@ -70,30 +71,40 @@ export default function LoginPage() {
     <Box
       sx={{
         display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' }, // Nếu là màn hình mobile (xs), dùng column, desktop dùng row
         height: '100vh',
       }}
     >
       {/* Left Banner */}
-
-      <Image
-        src={LoginBanner}
-        alt="Adidas Men Running Sneakers"
-        objectFit="cover"
-        quality={100}
-        style={{
-          width: '70%', // Make the image width responsive
-          height: '100%', // Maintain aspect ratio
+      <Box
+        sx={{
+          width: { xs: '100%', md: '70%' }, // Chiếm 100% trên mobile, 70% trên desktop
+          height: { xs: '30%', md: '100%' }, // Chiều cao banner thay đổi trên mobile
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
-      />
+      >
+        <Image
+          src={LoginBanner}
+          alt="Adidas Men Running Sneakers"
+          objectFit="cover"
+          quality={100}
+          style={{
+            width: '100%', // Đảm bảo ảnh chiếm toàn bộ chiều rộng
+            height: '100%', // Đảm bảo ảnh bao phủ toàn bộ chiều cao
+          }}
+        />
+      </Box>
 
       {/* Right Login Form */}
       <Box
         sx={{
-          width: '30%',
+          width: { xs: '100%', md: '30%' }, // Chiếm toàn bộ chiều rộng trên mobile, 30% trên desktop
           p: 4,
           borderRadius: '10px',
           textAlign: 'center',
-          ml: { xs: 0, md: 3 },
+          ml: { xs: 0, md: 3 }, // Giãn cách form với banner trên desktop
         }}
       >
         <Typography variant="h4" fontWeight="bold" mb={2}>
@@ -142,19 +153,12 @@ export default function LoginPage() {
             ),
           }}
         />
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          mb={3}
-        >
+
+        <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
           <Box display="flex" alignItems="center">
             <Checkbox />
             <Typography variant="body2">Lưu đăng nhập</Typography>
           </Box>
-          {/* <Typography variant="body2" color="primary" component="a" href="#">
-            Quên mật khẩu?
-          </Typography> */}
         </Box>
 
         <Button
@@ -189,24 +193,25 @@ export default function LoginPage() {
             Đăng ký
           </Typography>
         </Typography>
-  {/* admin login */}
+
+        {/* Admin login link */}
         <Typography
-  variant="body2"
-  color="primary"
-  sx={{
-    textDecoration: 'underline',
-    cursor: 'pointer',
-    mt: 2,
-    '&:hover': {
-      color: 'darkblue', // Màu hover
-    },
-  }}
-  onClick={() => {
-    // Thực hiện logic đăng nhập admin
-  }}
->
-  Đăng nhập với tư cách quản trị viên
-</Typography>
+          variant="body2"
+          color="primary"
+          sx={{
+            textDecoration: 'underline',
+            cursor: 'pointer',
+            mt: 2,
+            '&:hover': {
+              color: 'darkblue', // Màu hover
+            },
+          }}
+          onClick={() => {
+            // Thực hiện logic đăng nhập admin
+          }}
+        >
+          Đăng nhập với tư cách quản trị viên
+        </Typography>
 
         <Snackbar
           open={isLoginSuccess}

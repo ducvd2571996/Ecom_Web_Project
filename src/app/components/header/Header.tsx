@@ -6,6 +6,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import OrderIcon from '@mui/icons-material/ListAlt';
+import ContactMailIcon from '@mui/icons-material/ContactMail';
 import {
   AppBar,
   Badge,
@@ -66,7 +67,7 @@ const Header: React.FC = () => {
   const [searchResults, setSearchResults] = useState<string[]>([]);
   const [user, setUser] = useState(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [localAmount, setLocalAmount] = useState(0); // Local state for amount
+  const [localAmount, setLocalAmount] = useState(0);
   const amount = useSelector((state: RootState) => state.cart?.amount);
   const userData = localStorage.getItem('user');
   const cachedUser = userData ? JSON.parse(userData) : null;
@@ -80,15 +81,14 @@ const Header: React.FC = () => {
   };
 
   const handleProfileClick = () => {
-    // Navigate to profile details or perform profile-related actions
-    router.push('/profile'); // Điều hướng đến trang ProfilePage
+    router.push('/profile');
     handleClose();
   };
 
   useEffect(() => {
-    // Update localAmount whenever Redux amount changes
     setLocalAmount(amount);
   }, [amount]);
+
   const items = [
     'Apple',
     'Banana',
@@ -103,7 +103,7 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     setUser(cachedUser?.userInfo);
-  }, []);
+  }, [cachedUser?.userInfo]);
 
   const handleCartClick = () => {
     window.location.href = '/cart';
@@ -147,9 +147,8 @@ const Header: React.FC = () => {
     setSearchResults(filteredResults);
   };
 
-  // Sự kiện chuyển trang khi bấm vào nút Liên hệ
   const handleContactClick = () => {
-    window.location.href = '/contact'; // Chuyển đến trang Contact
+    window.location.href = '/contact';
   };
 
   return (
@@ -273,6 +272,10 @@ const Header: React.FC = () => {
             </Badge>
           </IconButton>
 
+          <IconButton onClick={handleContactClick}>
+            <ContactMailIcon color="primary" />
+          </IconButton>
+
           {/* Search Icon Button */}
           <IconButton sx={{ marginRight: -5 }} onClick={handleSearchClick}>
             <SearchIcon />
@@ -309,18 +312,9 @@ const Header: React.FC = () => {
               )}
             </Search>
           )}
-
-          {/* Liên hệ */}
-          <Typography
-            onClick={handleContactClick}
-            color="primary"
-            fontWeight="bold"
-            sx={{ cursor: 'pointer' }}
-          >
-            Liên hệ
-          </Typography>
         </Box>
       </Toolbar>
+
       <Divider
         sx={{
           width: { xs: '100%' },
