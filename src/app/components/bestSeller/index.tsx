@@ -69,6 +69,7 @@ const BestSeller = () => {
       <Grid container spacing={5}>
         {filteredProducts.map((product) => (
           <ProductItem
+            product={product}
             key={product.productId}
             id={product.productId}
             name={product.name}

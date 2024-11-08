@@ -128,6 +128,7 @@ const Header: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('wishList');
     handleClose();
     window.location.reload();
   };

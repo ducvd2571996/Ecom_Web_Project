@@ -28,6 +28,10 @@ import {
   updateCartHanlder,
 } from '../cart/store/reducers/cart';
 import { Rating } from '@mui/material';
+import {
+  getWishList,
+  updateWishList,
+} from '../wish-list/store/reducers/wish-list';
 
 const ProductDetailPage = () => {
   const [size, setSize] = useState('XS');
@@ -64,18 +68,33 @@ const ProductDetailPage = () => {
     setQuantity((prevQuantity) => Math.max(1, prevQuantity + amount));
   };
 
+  const { wishList } = useSelector((state: RootState) => state.wishList);
+  const isInWishList = wishList?.find(
+    (product) => product?.productId === productDetail?.productId
+  );
+
   const handleFavoriteToggle = () => {
-    setIsFavorite((prev) => !prev);
+    if (productDetail) {
+      console.log('pro', productDetail, isInWishList, wishList);
+
+      dispatch(updateWishList(productDetail));
+    }
   };
 
   // Hàm xử lý khi người dùng thay đổi rating
-  const handleRatingChange = (event: React.ChangeEvent<{}>, newRating: number | null) => {
+  const handleRatingChange = (
+    event: React.ChangeEvent<{}>,
+    newRating: number | null
+  ) => {
     if (newRating !== null) {
       setRating(newRating);
       // Lưu rating vào localStorage để duy trì giá trị khi người dùng quay lại
       localStorage.setItem(`rating-${id}`, String(newRating));
     }
   };
+  useEffect(() => {
+    dispatch(getWishList());
+  }, [dispatch, wishList?.length]);
 
   const price = productDetail?.price || 0;
   const discount = productDetail?.discount || 0;
@@ -160,6 +179,10 @@ const ProductDetailPage = () => {
                 onChange={handleRatingChange}
                 sx={{ fontSize: 16 }} // Thay đổi kích thước của các sao
               />
+              <Typography variant="body2" sx={{ marginLeft: 1 }}>
+                (100 đánh giá){' '}
+                {/* Số lượng đánh giá, có thể cập nhật từ props */}
+              </Typography>
             </Box>
 
             <Divider
@@ -284,7 +307,7 @@ const ProductDetailPage = () => {
                 }}
               >
                 <IconButton onClick={handleFavoriteToggle}>
-                  {isFavorite ? (
+                  {isInWishList ? (
                     <FavoriteIcon color="error" />
                   ) : (
                     <FavoriteBorderIcon sx={{ color: '#33A0FF' }} />
