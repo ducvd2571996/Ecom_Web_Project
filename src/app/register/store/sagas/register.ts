@@ -35,12 +35,12 @@ function* registerSaga(action: ActionType): Generator<any, void, DataType> {
     const rs = yield call(onRegister, user);
     if (rs?.status === 200) {
       yield put(registerSuccess());
-      callback(rs);
+      callback?.(rs);
     } else {
-      callback(rs);
+      callback?.(rs);
     }
   } catch (error: any) {
-    callback(error?.response?.data);
+    callback?.(error?.response?.data);
     yield put(registerFailure());
   }
 }

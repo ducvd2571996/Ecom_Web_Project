@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Card,
   CardMedia,
@@ -15,6 +16,13 @@ import VisibilityIcon from '@mui/icons-material/Visibility'; // Import the Visib
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { formatPrice } from '@/helper/formatString/format-price';
+import { useDispatch } from 'react-redux';
+import {
+  createCartHanlder,
+  updateCartHanlder,
+  getCartHanlder,
+} from '@/app/cart/store/reducers/cart';
+import { CreateCartDTO } from '@/app/model/cart.model';
 
 interface ProductItemProps {
   id: number;
@@ -35,21 +43,62 @@ const ProductItem = ({
   const router = useRouter();
   const [hovered, setHovered] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-
+  const dispatch = useDispatch();
   const handleFavoriteToggle = () => {
     setIsFavorite((prev) => !prev);
   };
 
   const onNavigateDetail = () => {
-    console.log('aaa00', id);
-
     const url = `/product-detail?id=${id}`;
     router.push(url);
   };
 
-  const onNavigateLogin = () => {
-    const url = `/login`;
-    router.push(url);
+  const onHandleAddToCart = () => {
+    const userData = localStorage.getItem('user');
+    const user = userData ? JSON.parse(userData) : null;
+    if (user?.userInfo) {
+      const userId = user?.userInfo?.id;
+      if (user?.userInfo?.id) {
+        const product = {
+          id,
+          name,
+          image: imageUrl,
+          tax: 0,
+          discount,
+          price,
+          quantity: 1,
+          note: '',
+        };
+        const cart: CreateCartDTO = {
+          products: [product],
+          customerId: userId,
+          isAddToCart: true,
+        };
+        dispatch(
+          getCartHanlder({
+            userId,
+            callback: (rs: any) => {
+              if (rs?.data) {
+                dispatch(
+                  updateCartHanlder({
+                    cart,
+                  })
+                );
+              } else {
+                dispatch(
+                  createCartHanlder({
+                    cart,
+                  })
+                );
+              }
+            },
+          })
+        );
+      }
+    } else {
+      const url = `/login`;
+      router.push(url);
+    }
   };
 
   const discountPrice = price - Math.round((price * discount) / 100);
@@ -148,7 +197,7 @@ const ProductItem = ({
               </IconButton>
             </Tooltip>
             <Tooltip title="Thêm giỏ hàng">
-              <IconButton onClick={onNavigateLogin} sx={{ color: '#40BFFF' }}>
+              <IconButton onClick={onHandleAddToCart} sx={{ color: '#40BFFF' }}>
                 <ShoppingCartIcon />
               </IconButton>
             </Tooltip>
