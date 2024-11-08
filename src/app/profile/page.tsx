@@ -76,6 +76,12 @@ const ProfilePage = () => {
             </Button>
           </Box>
         </Box>
+        {/* Nút Edit ở góc phải */}
+        <Box sx={{ position: 'absolute', top: 5, right: 16 }}>
+          <Button variant="contained" color="primary">
+            Edit
+          </Button>
+        </Box>
 
         {/* Grid chứa các thông tin */}
         <Grid container spacing={2} sx={{ mt: 4, paddingLeft: 8 }}>
