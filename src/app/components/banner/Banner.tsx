@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react';
 
 const Banner = () => {
   const images = [
-    'https://packmojo.com/blog/images/size/w1000/2021/06/shoes-bg.jpg',
-    'https://boathousestores.com/cdn/shop/collections/WSALE_d33c277f-068b-4120-99fa-b5656522e7b2.png', // Use local images if necessary
-    'https://packmojo.com/blog/images/size/w1000/2021/06/shoes-bg.jpg',
+    'https://drake.vn/image/catalog/H%C3%ACnh%20content/sale%207-11.11/web-sale-7-den-11-11-21.jpg',
+    'https://www.bizzbuzz.news/h-upload/2024/02/16/1863834-nike-incbanner.jpg',
+    'https://file.hstatic.net/200000410665/collection/banner-flash-sale-_web_2_c78501d033764e1dac648de41aebf819.jpg',
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Auto-change images every 5 seconds
+  // Auto-change images every 5 seconds   
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -20,12 +20,12 @@ const Banner = () => {
   }, [images.length]);
 
   return (
-    <Box sx={{ position: 'relative' }}>
+    <Box sx={{ position: 'relative'}}>
       <CardMedia
         component="img"
         sx={{
           width: '100%',
-          height: 400,
+          height: '85%',
         }}
         image={images[currentIndex]}
         alt={`Slide ${currentIndex + 1}`}
