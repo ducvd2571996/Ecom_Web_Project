@@ -27,6 +27,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
+// Tạo các styled components cho thanh tìm kiếm
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -62,26 +63,29 @@ const ResultsList = styled(Paper)(({ theme }) => ({
 }));
 
 const Header: React.FC = () => {
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<string[]>([]);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [localAmount, setLocalAmount] = useState(0);
-  const amount = useSelector((state: RootState) => state.cart?.amount);
-  const userData = localStorage.getItem('user');
-  const cachedUser = userData ? JSON.parse(userData) : null;
-  const router = useRouter();
-  
+  const [searchOpen, setSearchOpen] = useState(false); // Kiểm soát việc mở/đóng thanh tìm kiếm
+  const [searchQuery, setSearchQuery] = useState(''); // Lưu trữ từ khóa tìm kiếm
+  const [searchResults, setSearchResults] = useState<string[]>([]); // Lưu trữ kết quả tìm kiếm
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null); // Lưu trữ phần tử gốc cho Menu
+  const [localAmount, setLocalAmount] = useState(0); // Lưu trữ số lượng sản phẩm trong giỏ hàng
+  const amount = useSelector((state: RootState) => state.cart?.amount); // Lấy số lượng sản phẩm từ Redux store
+  const userData = localStorage.getItem('user'); // Lấy dữ liệu người dùng từ localStorage
+  const cachedUser = userData ? JSON.parse(userData) : null; // Kiểm tra nếu có người dùng thì parse dữ liệu
+  const router = useRouter(); // Hook điều hướng từ Next.js
+
+  // Hàm mở menu khi người dùng nhấn vào biểu tượng tài khoản
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     if (event?.currentTarget) {
       setAnchorEl(event.currentTarget);
     }
   };
 
+  // Hàm đóng menu
   const handleClose = () => {
     setAnchorEl(null);
   };
 
+  // Hàm điều hướng tới trang thông tin cá nhân
   const handleProfileClick = () => {
     router.push('/profile');
     handleClose();
@@ -103,11 +107,12 @@ const Header: React.FC = () => {
     'Raspberry',
   ];
 
+  // Hàm điều hướng tới trang giỏ hàng
   const handleCartClick = () => {
     window.location.href = '/cart';
   };
 
- 
+  // Các hàm điều hướng khác (đăng ký, đăng nhập, đơn hàng, danh sách yêu thích)
   const gotoRegister = () => {
     window.location.href = '/register';
   };
@@ -124,14 +129,16 @@ const Header: React.FC = () => {
     window.location.href = '/wish-list';
   };
 
+  // Hàm đăng xuất, xóa thông tin người dùng khỏi localStorage và reload trang
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('wishList');
     handleClose();
-    window.location.reload();
+    window.location.reload(); // Reload lại trang sau khi đăng xuất
   };
 
+  // Hàm kiểm soát việc mở hoặc đóng thanh tìm kiếm
   const handleSearchClick = () => {
     setSearchOpen(!searchOpen);
   };
@@ -140,10 +147,11 @@ const Header: React.FC = () => {
     const query = event?.target?.value;
     setSearchQuery(query);
 
+    // Lọc danh sách sản phẩm theo từ khóa tìm kiếm
     const filteredResults = items.filter((item) =>
       item.toLowerCase().includes(query.toLowerCase())
     );
-    setSearchResults(filteredResults);
+    setSearchResults(filteredResults); // Cập nhật kết quả tìm kiếm
   };
 
   return (
@@ -180,7 +188,7 @@ const Header: React.FC = () => {
           </Typography>
         </Link>
 
-        {/* Right Section - Profile, Cart, Search */}
+        {/* Phần bên phải - Profile, Cart, Search */}
         <Box
           sx={{
             display: 'flex',
@@ -193,6 +201,7 @@ const Header: React.FC = () => {
             },
           }}
         >
+          {/* Kiểm tra nếu người dùng đã đăng nhập */}
           {!cachedUser ? (
             <Box display={'flex'}>
               <Typography
@@ -260,12 +269,13 @@ const Header: React.FC = () => {
               </Menu>
             </Box>
           )}
+          {/* Giỏ hàng */}
           <IconButton onClick={handleCartClick}>
             <Badge badgeContent={localAmount} color="primary">
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
-
+          {/* Tìm kiếm */}
           <Search>
             <SearchInput
               placeholder="Tìm kiếm sản phẩm..."
