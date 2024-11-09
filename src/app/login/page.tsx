@@ -71,15 +71,15 @@ export default function LoginPage() {
     <Box
       sx={{
         display: 'flex',
-        flexDirection: { xs: 'column', md: 'row' }, // Nếu là màn hình mobile (xs), dùng column, desktop dùng row
+        flexDirection: { xs: 'column', md: 'row' }, // Column cho mobile, row cho desktop
         height: '100vh',
       }}
     >
       {/* Left Banner */}
       <Box
         sx={{
-          width: { xs: '100%', md: '70%' }, // Chiếm 100% trên mobile, 70% trên desktop
-          height: { xs: '30%', md: '100%' }, // Chiều cao banner thay đổi trên mobile
+          width: { xs: '100%', md: '70%' }, // Banner chiếm 100% trên mobile, 70% trên desktop
+          height: { xs: '30%', md: '100%' }, // Chiều cao thay đổi trên mobile
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -87,12 +87,12 @@ export default function LoginPage() {
       >
         <Image
           src={LoginBanner}
-          alt="Adidas Men Running Sneakers"
+          alt="Login Banner"
           objectFit="cover"
           quality={100}
           style={{
-            width: '100%', // Đảm bảo ảnh chiếm toàn bộ chiều rộng
-            height: '100%', // Đảm bảo ảnh bao phủ toàn bộ chiều cao
+            width: '100%',
+            height: '100%',
           }}
         />
       </Box>
@@ -100,11 +100,11 @@ export default function LoginPage() {
       {/* Right Login Form */}
       <Box
         sx={{
-          width: { xs: '100%', md: '30%' }, // Chiếm toàn bộ chiều rộng trên mobile, 30% trên desktop
+          width: { xs: '100%', md: '30%' }, // Form chiếm 100% trên mobile, 30% trên desktop
           p: 4,
           borderRadius: '10px',
           textAlign: 'center',
-          ml: { xs: 0, md: 3 }, // Giãn cách form với banner trên desktop
+          ml: { xs: 0, md: 3 },
         }}
       >
         <Typography variant="h4" fontWeight="bold" mb={2}>
@@ -203,7 +203,7 @@ export default function LoginPage() {
             cursor: 'pointer',
             mt: 2,
             '&:hover': {
-              color: 'darkblue', // Màu hover
+              color: 'darkblue',
             },
           }}
           onClick={() => {

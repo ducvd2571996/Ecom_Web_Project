@@ -10,7 +10,7 @@ import {
   AppBar,
   Badge,
   Box,
-  Divider,
+  Divider,  // Giữ nguyên import Divider
   IconButton,
   InputBase,
   Link,
@@ -177,15 +177,6 @@ const Header: React.FC = () => {
           </Typography>
         </Link>
 
-        {/* Navigation Buttons */}
-        <Box sx={{ display: 'flex', gap: 3 }}>
-          <Button component={Link} href="/" color="inherit">Trang Chủ</Button>
-          <Button component={Link} href="/productList?category=tui-xach" color="inherit">Túi Xách</Button>
-          <Button component={Link} href="/productList?category=sneaker" color="inherit">Sneaker</Button>
-          <Button component={Link} href="/productList?category=phu-kien" color="inherit">Phụ Kiện</Button>
-          <Button component={Link} href="/contact" color="inherit">Liên Hệ</Button>
-        </Box>
-
         {/* Right Section - Profile, Cart, Search */}
         <Box
           sx={{
@@ -245,6 +236,10 @@ const Header: React.FC = () => {
                   </ListItemIcon>
                   Thông tin cá nhân
                 </MenuItem>
+                
+                {/* Divider để phân tách các mục menu */}
+                <Divider />
+
                 <MenuItem onClick={gotoWishList}>
                   <ListItemIcon>
                     <FavoriteIcon fontSize="small" />
@@ -303,7 +298,73 @@ const Header: React.FC = () => {
           </Search>
         </Box>
       </Toolbar>
-      <Divider />
+
+      {/* Navigation Buttons */}
+      <Toolbar
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 10,  //  khoảng cách giữa các nút
+          paddingY: 0.2,  // padding dọc 
+          backgroundColor: 'white',
+        }}
+      >
+        <Button
+          component={Link}
+          href="/"
+          color="inherit"
+          sx={{
+            fontWeight: 'bold',
+            fontSize: '1.1rem',
+          }}
+        >
+          Trang Chủ
+        </Button>
+        <Button
+          component={Link}
+          href="/tui-xach"
+          color="inherit"
+          sx={{
+            fontWeight: 'bold',
+            fontSize: '1.1rem',
+          }}
+        >
+          Túi Xách
+        </Button>
+        <Button
+          component={Link}
+          href="/sneaker"
+          color="inherit"
+          sx={{
+            fontWeight: 'bold',
+            fontSize: '1.1rem',
+          }}
+        >
+          Sneaker
+        </Button>
+        <Button
+          component={Link}
+          href="/phu-kien"
+          color="inherit"
+          sx={{
+            fontWeight: 'bold',
+            fontSize: '1.1rem',
+          }}
+        >
+          Phụ Kiện
+        </Button>
+        <Button
+          component={Link}
+          href="/contact"
+          color="inherit"
+          sx={{
+            fontWeight: 'bold',
+            fontSize: '1.1rem',
+          }}
+        >
+          Liên Hệ
+        </Button>
+      </Toolbar>
     </AppBar>
   );
 };

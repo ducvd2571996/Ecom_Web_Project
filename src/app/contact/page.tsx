@@ -89,9 +89,34 @@ export default function ContactPage() {
             backgroundColor: 'white',
           }}
         >
-          <Typography variant="h4" fontWeight="bold" mb={2}>
-            E-Comm
-          </Typography>
+          {/* Logo */}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mb: 2,  // Thêm khoảng cách giữa logo và tiêu đề
+            }}
+          >
+            <Box
+              sx={{
+                backgroundColor: '#58c9f3',
+                borderRadius: '50%',
+                width: 40,
+                height: 40,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mr: 1,
+              }}
+            >
+              <Typography sx={{ color: 'white', fontSize: 20 }}>E</Typography>
+            </Box>
+            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+              E-Comm
+            </Typography>
+          </Box>
+
           <Typography variant="h5" mb={3}>
             Liên Hệ
           </Typography>
