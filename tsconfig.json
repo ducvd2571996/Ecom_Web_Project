@@ -1,31 +1,41 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"], // Hỗ trợ các tính năng mới nhất của ECMAScript và DOM API
-    "allowJs": true,                          // Cho phép sử dụng các file `.js` bên cạnh `.ts` và `.tsx`
-    "skipLibCheck": true,                     // Bỏ qua việc kiểm tra kiểu cho các file trong `node_modules` để tăng tốc độ biên dịch
-    "strict": true,                           // Kích hoạt chế độ kiểm tra nghiêm ngặt của TypeScript
-    "noEmit": true,                           // Không tạo ra file output khi biên dịch (dành riêng cho TypeScript-only environment)
-    "esModuleInterop": true,                  // Tương thích với module ES, giúp dễ dàng import/export
-    "module": "esnext",                       // Sử dụng module ES hiện đại
-    "moduleResolution": "bundler",            // Phương thức resolve module phù hợp với bundler (Webpack, etc.)
-    "resolveJsonModule": true,                // Cho phép import file JSON
-    "isolatedModules": true,                  // Mỗi file sẽ được xem như một module riêng biệt
-    "jsx": "preserve",                        // Giữ nguyên JSX để Next.js xử lý
-    "incremental": true,                      // Bật biên dịch gia tăng để tăng tốc
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ], // Hỗ trợ các tính năng mới nhất của ECMAScript và DOM API
+    "allowJs": true, // Cho phép sử dụng các file `.js` bên cạnh `.ts` và `.tsx`
+    "skipLibCheck": true, // Bỏ qua việc kiểm tra kiểu cho các file trong `node_modules` để tăng tốc độ biên dịch
+    "strict": true, // Kích hoạt chế độ kiểm tra nghiêm ngặt của TypeScript
+    "noEmit": true, // Không tạo ra file output khi biên dịch (dành riêng cho TypeScript-only environment)
+    "esModuleInterop": true, // Tương thích với module ES, giúp dễ dàng import/export
+    "module": "esnext", // Sử dụng module ES hiện đại
+    "moduleResolution": "bundler", // Phương thức resolve module phù hợp với bundler (Webpack, etc.)
+    "resolveJsonModule": true, // Cho phép import file JSON
+    "isolatedModules": true, // Mỗi file sẽ được xem như một module riêng biệt
+    "jsx": "preserve", // Giữ nguyên JSX để Next.js xử lý
+    "incremental": true, // Bật biên dịch gia tăng để tăng tốc
     "plugins": [
       {
-        "name": "next"                        // Plugin Next.js cho TypeScript
+        "name": "next" // Plugin Next.js cho TypeScript
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]                      // Aliases cho các import từ `src`
-    }
+      "@/*": [
+        "./src/*"
+      ] // Aliases cho các import từ `src`
+    },
+    "target": "ES2017"
   },
   "include": [
-    "next-env.d.ts", 
-    "**/*.ts", 
-    "**/*.tsx", 
-    ".next/types/**/*.ts"
-, "src/app/public/asset/icons/ShippingIC.jsx"  ],
-  "exclude": ["node_modules"]
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/app/public/asset/icons/ShippingIC.jsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
