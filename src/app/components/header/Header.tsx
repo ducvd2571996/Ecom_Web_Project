@@ -73,14 +73,14 @@ const Header: React.FC = () => {
   const router = useRouter();
   
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+    if (event?.currentTarget) {
+      setAnchorEl(event.currentTarget);
+    }
   };
 
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-
 
   const handleProfileClick = () => {
     router.push('/profile');
@@ -107,10 +107,7 @@ const Header: React.FC = () => {
     window.location.href = '/cart';
   };
 
-  const handleItemClick = () => {
-    window.location.href = '/product-list';
-  };
-
+ 
   const gotoRegister = () => {
     window.location.href = '/register';
   };
@@ -140,7 +137,7 @@ const Header: React.FC = () => {
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const query = event.target.value;
+    const query = event?.target?.value;
     setSearchQuery(query);
 
     const filteredResults = items.filter((item) =>
@@ -219,7 +216,7 @@ const Header: React.FC = () => {
               </Typography>
             </Box>
           ) : (
-            <>
+            <Box>
               <IconButton onClick={handleOpen}>
                 <AccountCircleIcon />
               </IconButton>
@@ -242,10 +239,6 @@ const Header: React.FC = () => {
                   </ListItemIcon>
                   Thông tin cá nhân
                 </MenuItem>
-                
-                {/* Divider để phân tách các mục menu */}
-                <Divider />
-
                 <MenuItem onClick={gotoWishList}>
                   <ListItemIcon>
                     <FavoriteIcon fontSize="small" />
@@ -265,9 +258,8 @@ const Header: React.FC = () => {
                   Đăng xuất
                 </MenuItem>
               </Menu>
-            </>
+            </Box>
           )}
-
           <IconButton onClick={handleCartClick}>
             <Badge badgeContent={localAmount} color="primary">
               <ShoppingCartIcon />
@@ -303,73 +295,6 @@ const Header: React.FC = () => {
             )}
           </Search>
         </Box>
-      </Toolbar>
-
-      {/* Navigation Buttons */}
-      <Toolbar
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: 10,  //  khoảng cách giữa các nút
-          paddingY: 0.2,  // padding dọc 
-          backgroundColor: 'white',
-        }}
-      >
-        <Button
-          component={Link}
-          href="/"
-          color="inherit"
-          sx={{
-            fontWeight: 'bold',
-            fontSize: '1.1rem',
-          }}
-        >
-          Trang Chủ
-        </Button>
-        <Button
-          component={Link}
-          color="inherit"
-          sx={{
-            fontWeight: 'bold',
-            fontSize: '1.1rem',
-          }}
-          onClick={handleItemClick}
-        >
-          Túi Xách
-        </Button>
-        <Button
-          component={Link}
-          color="inherit"
-          sx={{
-            fontWeight: 'bold',
-            fontSize: '1.1rem',
-          }}
-          onClick={handleItemClick}
-        >
-          Sneaker
-        </Button>
-        <Button
-          component={Link}
-          color="inherit"
-          sx={{
-            fontWeight: 'bold',
-            fontSize: '1.1rem',
-          }}
-          onClick={handleItemClick}
-        >
-          Phụ Kiện
-        </Button>
-        <Button
-          component={Link}
-          href="/contact"
-          color="inherit"
-          sx={{
-            fontWeight: 'bold',
-            fontSize: '1.1rem',
-          }}
-        >
-          Liên Hệ
-        </Button>
       </Toolbar>
     </AppBar>
   );

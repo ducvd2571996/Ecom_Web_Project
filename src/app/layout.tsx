@@ -9,6 +9,8 @@ import { Provider } from 'react-redux';
 import './globals.css';
 import store from './store/store';
 import { usePathname } from 'next/navigation';
+import NavBar from './components/navBar';
+import { Box } from '@mui/material';
 
 const poppins = Poppins({
   weight: ['300', '400', '500', '600', '700'], // Include desired weights
@@ -30,7 +32,12 @@ export default function RootLayout({
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeProvider theme={theme}>
             <Provider store={store}>
-              {!isLoginPage && <Header />}
+              {!isLoginPage &&
+              <Box>
+                <Header />
+                <NavBar/>
+              </Box>
+               }
               <main>{children}</main>
               {!isLoginPage && <Footer />}
             </Provider>
