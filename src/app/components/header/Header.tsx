@@ -80,10 +80,7 @@ const Header: React.FC = () => {
     setAnchorEl(null);
   };
 
-  const handleProductlistClick = () => {
-    router.push('/product-list');
-    handleClose();
-  };
+
 
   const handleProfileClick = () => {
     router.push('/profile');
@@ -108,6 +105,10 @@ const Header: React.FC = () => {
 
   const handleCartClick = () => {
     window.location.href = '/cart';
+  };
+
+  const handleItemClick = () => {
+    window.location.href = '/product-list';
   };
 
   const gotoRegister = () => {
@@ -327,35 +328,34 @@ const Header: React.FC = () => {
         </Button>
         <Button
           component={Link}
-          href="/tui-xach"
           color="inherit"
           sx={{
             fontWeight: 'bold',
             fontSize: '1.1rem',
           }}
-          onClick={handleProductlistClick}
+          onClick={handleItemClick}
         >
           Túi Xách
         </Button>
         <Button
           component={Link}
-          href="/sneaker"
           color="inherit"
           sx={{
             fontWeight: 'bold',
             fontSize: '1.1rem',
           }}
+          onClick={handleItemClick}
         >
           Sneaker
         </Button>
         <Button
           component={Link}
-          href="/phu-kien"
           color="inherit"
           sx={{
             fontWeight: 'bold',
             fontSize: '1.1rem',
           }}
+          onClick={handleItemClick}
         >
           Phụ Kiện
         </Button>

@@ -8,6 +8,7 @@ import ProductList from '../components/productList';
 import ProductFilter from '../components/prouductFilter';
 import ViewCompactSharpIcon from '@mui/icons-material/ViewCompactSharp';
 
+
 export default function ProductListPage() {
   const [productCount, setProductCount] = useState(13);
   return (
