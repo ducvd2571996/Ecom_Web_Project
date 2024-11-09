@@ -29,7 +29,7 @@ export default function LoginPage() {
   const [error, setError] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
   const [isLoginSuccess, setLoginSuccess] = useState(false);
-  const { loading } = useSelector((state: RootState) => state.register);
+  const { loading } = useSelector((state: RootState) => state.login);
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -154,7 +154,12 @@ export default function LoginPage() {
           }}
         />
 
-        <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mb={3}
+        >
           <Box display="flex" alignItems="center">
             <Checkbox />
             <Typography variant="body2">Lưu đăng nhập</Typography>
