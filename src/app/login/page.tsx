@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-'use client'; // This makes the component a Client Component
+'use client';
+// Import các thành phần giao diện từ thư viện MUI (Material UI)
 import {
   Alert,
   Box,
@@ -23,33 +23,38 @@ import { isValidPassword, isValidPhone } from '@/helper/verifyInput';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 export default function LoginPage() {
+  // Khai báo các state để quản lý thông tin người dùng nhập vào
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Quản lý hiển thị mật khẩu
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(false);
-  const [phoneError, setPhoneError] = useState(false);
-  const [isLoginSuccess, setLoginSuccess] = useState(false);
-  const { loading } = useSelector((state: RootState) => state.register);
+  const [error, setError] = useState(false); // Kiểm tra lỗi mật khẩu
+  const [phoneError, setPhoneError] = useState(false); // Kiểm tra lỗi số điện thoại
+  const [isLoginSuccess, setLoginSuccess] = useState(false); // Trạng thái đăng nhập thành công hay không
+  const { loading } = useSelector((state: RootState) => state.register); // Lấy trạng thái loading từ Redux store
 
-  const dispatch = useDispatch();
-  const router = useRouter();
+  const dispatch = useDispatch(); // Dùng dispatch để gửi hành động
+  const router = useRouter(); // Sử dụng router để điều hướng trang
 
+  // Hàm thay đổi trạng thái hiển thị mật khẩu
   const handleTogglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
+  // Hàm thay đổi giá trị mật khẩu và kiểm tra tính hợp lệ
   const handlePasswordChange = (event: any) => {
     const newPassword = event.target.value;
     setPassword(newPassword);
-    setError(!isValidPassword(newPassword));
+    setError(!isValidPassword(newPassword)); // Kiểm tra nếu mật khẩu hợp lệ
   };
 
+  // Hàm thay đổi giá trị số điện thoại và kiểm tra tính hợp lệ
   const handlePhoneNumberChange = (event: any) => {
     const newPhoneNumber = event.target.value;
     setPhoneNumber(newPhoneNumber);
     setPhoneError(!isValidPhone(newPhoneNumber));
   };
 
+  // Hàm đăng nhập, gửi thông tin vào Redux store và điều hướng nếu thành công
   const handleLogin = () => {
     dispatch(
       loginHanlder({
@@ -63,6 +68,7 @@ export default function LoginPage() {
     );
   };
 
+  // Hàm chuyển hướng đến trang đăng ký
   const gotoRegister = () => {
     router.push('/register');
   };
@@ -132,7 +138,7 @@ export default function LoginPage() {
         <TextField
           fullWidth
           label="Nhập mật khẩu"
-          type={showPassword ? 'text' : 'password'}
+          type={showPassword ? 'text' : 'password'} // Hiển thị mật khẩu hay không
           variant="outlined"
           margin="normal"
           value={password}
