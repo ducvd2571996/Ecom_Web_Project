@@ -80,6 +80,11 @@ const Header: React.FC = () => {
     setAnchorEl(null);
   };
 
+  const handleProductlistClick = () => {
+    router.push('/product-list');
+    handleClose();
+  };
+
   const handleProfileClick = () => {
     router.push('/profile');
     handleClose();
@@ -328,6 +333,7 @@ const Header: React.FC = () => {
             fontWeight: 'bold',
             fontSize: '1.1rem',
           }}
+          onClick={handleProductlistClick}
         >
           Túi Xách
         </Button>
