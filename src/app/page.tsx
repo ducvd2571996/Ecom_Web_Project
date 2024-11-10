@@ -15,29 +15,21 @@ export default function Home() {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // Memoizing user data fetched from localStorage to avoid re-parsing on each render
   const cachedUser = useMemo(() => {
     const userData = localStorage.getItem('user');
     return userData ? JSON.parse(userData) : null;
-  }, []); // Empty dependency array ensures this only runs once on mount
+  }, []);
 
   const gotoProductList = () => {
     router.push('/product-list');
   };
 
-  // Dispatching actions only if userId exists and is different to prevent repeated API calls
   useEffect(() => {
     if (cachedUser?.userInfo?.userId) {
       dispatch(getCartHanlder({ userId: cachedUser?.userInfo?.id }));
       dispatch(fetchUserRequest(cachedUser?.userInfo?.id));
     }
-  }, [cachedUser?.userInfo?.userId, dispatch]); // Only re-run if userId changes
-
-  // Dispatch category and brand handlers only once on mount
-  // useEffect(() => {
-  //   dispatch(getCateListHanlder());
-  //   dispatch(getBrandsHanlder());
-  // }, [dispatch]);
+  }, [cachedUser?.userInfo?.userId, dispatch]);
 
   return (
     <Box>

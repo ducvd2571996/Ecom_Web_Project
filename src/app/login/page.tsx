@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 // Import các thành phần giao diện từ thư viện MUI (Material UI)
 import {
@@ -81,7 +82,6 @@ export default function LoginPage() {
         height: '100vh',
       }}
     >
-      {/* Left Banner */}
       <Box
         sx={{
           width: { xs: '100%', md: '70%' }, // Banner chiếm 100% trên mobile, 70% trên desktop
@@ -113,10 +113,26 @@ export default function LoginPage() {
           ml: { xs: 0, md: 3 },
         }}
       >
-        <Typography variant="h4" fontWeight="bold" mb={2}>
-          E-Comm
-        </Typography>
-        <Typography variant="h5" mb={3}>
+        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
+          <Box
+            sx={{
+              backgroundColor: '#58c9f3',
+              borderRadius: '50%',
+              width: 60,
+              height: 60,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mr: 1,
+            }}
+          >
+            <Typography sx={{ color: 'white', fontSize: 20 }}>E</Typography>
+          </Box>
+          <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+            E-Comm
+          </Typography>
+        </Box>
+        <Typography sx={{ fontWeight: 'bold' }} variant="h5" mb={3}>
           Đăng nhập
         </Typography>
 
@@ -160,7 +176,12 @@ export default function LoginPage() {
           }}
         />
 
-        <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mb={3}
+        >
           <Box display="flex" alignItems="center">
             <Checkbox />
             <Typography variant="body2">Lưu đăng nhập</Typography>
@@ -199,26 +220,6 @@ export default function LoginPage() {
             Đăng ký
           </Typography>
         </Typography>
-
-        {/* Admin login link */}
-        <Typography
-          variant="body2"
-          color="primary"
-          sx={{
-            textDecoration: 'underline',
-            cursor: 'pointer',
-            mt: 2,
-            '&:hover': {
-              color: 'darkblue',
-            },
-          }}
-          onClick={() => {
-            // Thực hiện logic đăng nhập admin
-          }}
-        >
-          Đăng nhập với tư cách quản trị viên
-        </Typography>
-
         <Snackbar
           open={isLoginSuccess}
           autoHideDuration={2000}

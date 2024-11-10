@@ -10,7 +10,7 @@ const Banner = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Auto-change images every 5 seconds   
+  // Auto-change images every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -20,7 +20,7 @@ const Banner = () => {
   }, [images.length]);
 
   return (
-    <Box sx={{ position: 'relative'}}>
+    <Box sx={{ position: 'relative' }}>
       <CardMedia
         component="img"
         sx={{

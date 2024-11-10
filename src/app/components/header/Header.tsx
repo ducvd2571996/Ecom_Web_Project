@@ -1,16 +1,16 @@
+import { Product } from '@/app/model';
 import { RootState } from '@/app/store/store';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import InfoIcon from '@mui/icons-material/Info';
+import OrderIcon from '@mui/icons-material/ListAlt';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import OrderIcon from '@mui/icons-material/ListAlt';
 import {
   AppBar,
   Badge,
-  Box,
-  Divider, // Giữ nguyên import Divider
+  Box, // Giữ nguyên import Divider
   IconButton,
   InputBase,
   Link,
@@ -20,7 +20,6 @@ import {
   Paper,
   Toolbar,
   Typography,
-  Button,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/navigation';
@@ -35,7 +34,6 @@ const Search = styled('div')(({ theme }) => ({
   '&:hover': {
     backgroundColor: theme.palette.action.hover,
   },
-  marginRight: theme.spacing(2),
   marginLeft: 0,
   width: '100%',
   [theme.breakpoints.up('sm')]: {
@@ -48,7 +46,6 @@ const SearchInput = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(1)})`,
     width: '100%',
   },
 }));
@@ -65,7 +62,7 @@ const ResultsList = styled(Paper)(({ theme }) => ({
 const Header: React.FC = () => {
   const [searchOpen, setSearchOpen] = useState(false); // Kiểm soát việc mở/đóng thanh tìm kiếm
   const [searchQuery, setSearchQuery] = useState(''); // Lưu trữ từ khóa tìm kiếm
-  const [searchResults, setSearchResults] = useState<string[]>([]); // Lưu trữ kết quả tìm kiếm
+  const [searchResults, setSearchResults] = useState<Product[]>([]); // Lưu trữ kết quả tìm kiếm
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null); // Lưu trữ phần tử gốc cho Menu
   const [localAmount, setLocalAmount] = useState(0); // Lưu trữ số lượng sản phẩm trong giỏ hàng
   const amount = useSelector((state: RootState) => state.cart?.amount); // Lấy số lượng sản phẩm từ Redux store
@@ -95,18 +92,6 @@ const Header: React.FC = () => {
     setLocalAmount(amount);
   }, [amount]);
 
-  const items = [
-    'Apple',
-    'Banana',
-    'Orange',
-    'Mango',
-    'Pineapple',
-    'Strawberry',
-    'Grapes',
-    'Blueberry',
-    'Raspberry',
-  ];
-
   // Hàm điều hướng tới trang giỏ hàng
   const handleCartClick = () => {
     window.location.href = '/cart';
@@ -119,9 +104,6 @@ const Header: React.FC = () => {
 
   const gotoLogin = () => {
     window.location.href = '/login';
-  };
-  const gotoDetail = () => {
-    window.location.href = '/product-detail';
   };
 
   const gotoOrder = () => {
@@ -141,20 +123,30 @@ const Header: React.FC = () => {
     window.location.reload(); // Reload lại trang sau khi đăng xuất
   };
 
-  // Hàm kiểm soát việc mở hoặc đóng thanh tìm kiếm
+  const searchItems = useSelector(
+    (state: RootState) => state.productList.productList
+  );
+
+  // Hàm kiểm soát việc tìm hiếm khi nhấn biểu tượng tìm kiếm
   const handleSearchClick = () => {
     setSearchOpen(!searchOpen);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const query = event?.target?.value;
+    const query = event.target.value;
     setSearchQuery(query);
 
-    // Lọc danh sách sản phẩm theo từ khóa tìm kiếm
-    const filteredResults = items.filter((item) =>
-      item.toLowerCase().includes(query.toLowerCase())
+    const filteredResults = searchItems.filter((product) =>
+      product.name.toLowerCase().includes(query.toLowerCase())
     );
-    setSearchResults(filteredResults); // Cập nhật kết quả tìm kiếm
+    setSearchResults(filteredResults);
+  };
+
+  const handleSearchResultClick = (result: Product) => {
+    setSearchQuery('');
+    setSearchResults([]);
+    const url = `/product-detail?id=${result?.productId}`;
+    router.push(url);
   };
 
   return (
@@ -166,7 +158,6 @@ const Header: React.FC = () => {
           paddingTop: 2,
         }}
       >
-        {/* Logo */}
         <Link
           href="/"
           underline="none"
@@ -196,11 +187,10 @@ const Header: React.FC = () => {
           sx={{
             display: 'flex',
             alignItems: 'center',
-            gap: 4,
-            marginRight: 12,
+            gap: { xs: 0, sm: 6 },
+            marginRight: { xs: 0, sm: 12 },
             '@media (max-width: 600px)': {
               gap: 2,
-              marginRight: 2,
             },
           }}
         >
@@ -279,36 +269,66 @@ const Header: React.FC = () => {
             </Badge>
           </IconButton>
           {/* Tìm kiếm */}
-          <Search>
-            <SearchInput
-              placeholder="Tìm kiếm sản phẩm..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-              onClick={handleSearchClick}
-            />
-            <IconButton
-              type="button"
-              sx={{
-                position: 'absolute',
-                right: 0,
-                top: '50%',
-                transform: 'translateY(-50%)',
-              }}
-            >
-              <SearchIcon />
-            </IconButton>
-            {searchResults.length > 0 && (
-              <ResultsList>
-                {searchResults.map((result, index) => (
-                  <Typography key={index} sx={{ padding: 1 }}>
-                    {result}
-                  </Typography>
-                ))}
-              </ResultsList>
-            )}
-          </Search>
+          <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
+            <Search>
+              <IconButton type="button">
+                <SearchIcon />
+              </IconButton>
+              <SearchInput
+                placeholder="Tìm kiếm sản phẩm..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              {searchResults.length > 0 && (
+                <ResultsList>
+                  {searchResults.map((result, index) => (
+                    <MenuItem
+                      key={index}
+                      onClick={() => handleSearchResultClick(result)}
+                    >
+                      <Typography>{result?.name}</Typography>
+                    </MenuItem>
+                  ))}
+                </ResultsList>
+              )}
+            </Search>
+          </Box>
         </Box>
       </Toolbar>
+      <Box
+        sx={{
+          display: { xs: 'flex', sm: 'none' },
+          justifyContent: 'center',
+          mt: 1,
+        }}
+      >
+        <Search sx={{ width: '90%' }}>
+          <IconButton type="button">
+            <SearchIcon />
+          </IconButton>
+          <SearchInput
+            sx={{ width: '80%' }}
+            placeholder="Tìm kiếm sản phẩm..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            onClick={handleSearchClick}
+          />
+
+          {searchResults.length > 0 && (
+            <ResultsList>
+              {searchResults.map((result, index) => (
+                <Typography
+                  onClick={() => handleSearchResultClick(result)}
+                  key={index}
+                  sx={{ padding: 1 }}
+                >
+                  {result?.name}
+                </Typography>
+              ))}
+            </ResultsList>
+          )}
+        </Search>
+      </Box>
     </AppBar>
   );
 };

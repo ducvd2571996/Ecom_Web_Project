@@ -24,8 +24,11 @@ const colors = [
   { id: 5, color: 'pink' },
   { id: 6, color: 'grey' },
 ];
+interface ProductFilterProps {
+  onPriceRangeChange: (range: number[]) => void;
+}
 
-const ProductFilter: React.FC = () => {
+const ProductFilter = ({ onPriceRangeChange }: ProductFilterProps) => {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000000]);
   const [selectedBrand, setSelectedBrand] = useState<number | null>(null);
   const [selectedCate, setSelectedCate] = useState<number | null>(null);
@@ -34,6 +37,7 @@ const ProductFilter: React.FC = () => {
 
   const handlePriceChange = (event: Event, newValue: number | number[]) => {
     setPriceRange(newValue as [number, number]);
+    onPriceRangeChange(newValue as [number, number]);
   };
 
   useEffect(() => {
@@ -52,7 +56,9 @@ const ProductFilter: React.FC = () => {
         <Typography variant="h6" gutterBottom>
           Giá tiền
         </Typography>
-        <Typography variant="body1" paddingBottom={2} fontSize={16}>Khoảng giá:</Typography>
+        <Typography variant="body1" paddingBottom={2} fontSize={16}>
+          Khoảng giá:
+        </Typography>
         <Typography variant="body1">
           đ{formatPrice(priceRange[0])} - đ{formatPrice(priceRange[1])}
         </Typography>
@@ -65,7 +71,6 @@ const ProductFilter: React.FC = () => {
           sx={{ marginTop: 2 }}
         />
       </Paper>
-
       {/* Brand Section */}
       <Paper sx={{ padding: 2, backgroundColor: '#F6F7F8' }}>
         <Typography variant="h6" gutterBottom>
@@ -109,7 +114,6 @@ const ProductFilter: React.FC = () => {
           ))}
         </List>
       </Paper>
-
       <Paper sx={{ padding: 2, backgroundColor: '#F6F7F8', marginTop: 3 }}>
         <Typography variant="h6" gutterBottom>
           Mặt hàng
@@ -150,8 +154,7 @@ const ProductFilter: React.FC = () => {
         </List>
       </Paper>
 
-      {/* Color Section */}
-      <Paper sx={{padding: 2, backgroundColor: '#F6F7F8', marginTop: 3 }}>
+      {/* <Paper sx={{ padding: 2, backgroundColor: '#F6F7F8', marginTop: 3 }}>
         <Typography variant="h6" paddingBottom={2} gutterBottom>
           Màu sắc
         </Typography>
@@ -166,13 +169,16 @@ const ProductFilter: React.FC = () => {
                 borderRadius: '50%',
                 backgroundColor: color.color,
                 cursor: 'pointer',
-                border: selectedColor === color.color ? '2px solid black' : '2px solid transparent',
+                border:
+                  selectedColor === color.color
+                    ? '2px solid black'
+                    : '2px solid transparent',
                 transition: 'border 0.3s',
               }}
             />
           ))}
         </Box>
-      </Paper>
+      </Paper> */}
     </Box>
   );
 };

@@ -14,7 +14,7 @@ const fetchBrands = async () => {
   const response = await axios.get(
     'http://127.0.0.1:3002/products/brands/get-all'
   );
-  return response.data; // Assuming data contains the product list
+  return response.data;
 };
 
 function* getBrandsSaga(): Generator<any, void, DataType> {

@@ -35,7 +35,7 @@ const CartPage = () => {
   const router = useRouter();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [productIndex, setProductIndex] = useState<number | null>(null);
-  const [localCart, setCart] = useState<any>({}); // Holds the cart data including quantities
+  const [localCart, setCart] = useState<any>({});
   const cachedUser = useMemo(() => {
     const userData = localStorage.getItem('user');
     return userData ? JSON.parse(userData) : null;
@@ -57,7 +57,6 @@ const CartPage = () => {
     action: 'increase' | 'decrease'
   ) => {
     setCart((prevCart: any) => {
-      // Copy the products array to avoid direct mutation
       const updatedProducts = prevCart?.products?.map(
         (product: Product, i: number) => {
           if (i === index) {

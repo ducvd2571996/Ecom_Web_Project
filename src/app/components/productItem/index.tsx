@@ -14,7 +14,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import VisibilityIcon from '@mui/icons-material/Visibility'; // Import the Visibility icon
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { formatPrice } from '@/helper/formatString/format-price';
 import { useDispatch, useSelector } from 'react-redux';
@@ -65,9 +65,18 @@ const ProductItem = ({
   }, [id]);
   const { wishList } = useSelector((state: RootState) => state.wishList);
   const isInWishList = wishList?.find((product) => product?.productId === id);
+  const cachedUser = useMemo(() => {
+    const userData = localStorage.getItem('user');
+    return userData ? JSON.parse(userData) : null;
+  }, []);
 
   const handleFavoriteToggle = () => {
-    dispatch(updateWishList(product));
+    if (cachedUser?.userInfo) {
+      dispatch(updateWishList(product));
+    } else {
+      const url = `/login`;
+      router.push(url);
+    }
   };
 
   useEffect(() => {
@@ -80,11 +89,9 @@ const ProductItem = ({
   };
 
   const onHandleAddToCart = () => {
-    const userData = localStorage.getItem('user');
-    const user = userData ? JSON.parse(userData) : null;
-    if (user?.userInfo) {
-      const userId = user?.userInfo?.id;
-      if (user?.userInfo?.id) {
+    if (cachedUser?.userInfo) {
+      const userId = cachedUser?.userInfo?.id;
+      if (userId) {
         const product = {
           id,
           name,
@@ -129,6 +136,7 @@ const ProductItem = ({
 
   // Hàm xử lý khi người dùng thay đổi rating
   const handleRatingChange = (
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     event: React.ChangeEvent<{}>,
     newRating: number | null
   ) => {
@@ -209,8 +217,9 @@ const ProductItem = ({
           </Box>
         )}
 
-        <CardContent style={{ alignItems: 'center' }}>
+        <CardContent style={{ alignItems: 'center', justifyContent: 'center' }}>
           <Typography
+            textAlign={'center'}
             gutterBottom
             variant="h6"
             component="div"
@@ -242,7 +251,7 @@ const ProductItem = ({
             />
           </Box>
 
-          <Typography variant="body2" color="#40BFFF">
+          <Typography textAlign={'center'} variant="body2" color="#40BFFF">
             đ{formatPrice(isHaveDiscount ? discountPrice : price)}
             {isHaveDiscount ? (
               <>

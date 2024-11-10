@@ -25,7 +25,7 @@ interface ActionType {
 const fetchProductsApi = async (id: number) => {
   const response = await axios.get(`http://127.0.0.1:3002/products/${id}`);
 
-  return response.data; // Assuming data contains the product list
+  return response.data;
 };
 
 function* getProductDetailSaga(

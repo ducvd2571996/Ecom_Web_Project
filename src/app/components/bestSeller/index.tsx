@@ -58,7 +58,7 @@ const BestSeller = () => {
             key={category?.id}
             variant={selectedCategory === category.id ? 'contained' : 'text'}
             onClick={() => handleTabChange(category.id)}
-            sx={{ mx: 1 }}
+            sx={{ mx: { sm: 1, xs: 0 } }}
           >
             {category.name}
           </Button>
@@ -67,7 +67,7 @@ const BestSeller = () => {
 
       {/* Product Grid */}
       <Grid container spacing={5}>
-        {filteredProducts.map((product) => (
+        {filteredProducts?.slice(0, 8)?.map((product) => (
           <ProductItem
             product={product}
             key={product.productId}

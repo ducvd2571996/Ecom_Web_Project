@@ -31,15 +31,15 @@ export default function RootLayout({
     <html lang="en">
       <body className={poppins.variable}>
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-          <ThemeProvider theme={theme}> 
-            <Provider store={store}> 
+          <ThemeProvider theme={theme}>
+            <Provider store={store}>
               {/* Nếu không phải là trang đăng nhập hoặc đăng ký thì hiển thị Header và NavBar */}
-              {!isLoginPage &&
-              <Box>
-                <Header />
-                <NavBar/>
-              </Box>
-               }
+              {!isLoginPage && (
+                <Box>
+                  <Header />
+                  <NavBar />
+                </Box>
+              )}
               <main>{children}</main>
               {/* Nếu không phải là trang đăng nhập hoặc đăng ký thì hiển thị Footer */}
               {!isLoginPage && <Footer />}

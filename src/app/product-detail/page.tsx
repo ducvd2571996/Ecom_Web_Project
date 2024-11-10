@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import {
@@ -33,17 +34,20 @@ import {
   getWishList,
   updateWishList,
 } from '../wish-list/store/reducers/wish-list';
+import ProductItem from '../components/productItem';
+import { Product } from '../model';
 
 const ProductDetailPage = () => {
   const [size, setSize] = useState('XS');
   const [quantity, setQuantity] = useState(1);
-  const [isFavorite, setIsFavorite] = useState(false);
   const router = useRouter();
   const [rating, setRating] = useState<number | null>(null); // Thay giá trị mặc định là null để khi render lại sẽ lấy từ storage
 
   const searchParams = useSearchParams();
   const id = searchParams.get('id'); // Get the 'id' query parameter
-
+  const productList = useSelector(
+    (state: RootState) => state?.productList.productList
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -71,14 +75,20 @@ const ProductDetailPage = () => {
 
   const { wishList } = useSelector((state: RootState) => state.wishList);
   const isInWishList = wishList?.find(
-    (product) => product?.productId === productDetail?.productId
+    (product: Product) => product?.productId === productDetail?.productId
   );
 
   const handleFavoriteToggle = () => {
+    const userData = localStorage.getItem('user');
+    const user = userData ? JSON.parse(userData) : null;
     if (productDetail) {
       console.log('pro', productDetail, isInWishList, wishList);
-
-      dispatch(updateWishList(productDetail));
+      if (user?.userInfo) {
+        dispatch(updateWishList(productDetail));
+      }
+    } else {
+      const url = `/login`;
+      router.push(url);
     }
   };
 
@@ -287,11 +297,11 @@ const ProductDetailPage = () => {
               <Button
                 onClick={onHandleAddToCart}
                 variant="contained"
-                sx={{ 
-                  backgroundColor: '#ebf6ff', 
+                sx={{
+                  backgroundColor: '#ebf6ff',
                   color: '#3baafd',
                   textTransform: 'none',
-                  fontSize: '16px'
+                  fontSize: '16px',
                 }}
                 startIcon={<ShoppingCartIcon />}
               >
@@ -307,7 +317,7 @@ const ProductDetailPage = () => {
                   paddingX: 2,
                   borderRadius: 2,
                   backgroundColor: '#ebf6ff',
-                  variant: 'contained'
+                  variant: 'contained',
                 }}
               >
                 <IconButton onClick={handleFavoriteToggle}>
@@ -323,6 +333,25 @@ const ProductDetailPage = () => {
         </Grid>
         <ProductContentTabs description={productDetail?.description || ''} />
       </Container>
+      <Box marginX={{ xs: 1, md: 35 }} marginBottom={10}>
+        <Typography variant="h6" marginY={5}>
+          Sản phẩm liên quan
+        </Typography>
+        <Grid container spacing={5}>
+          {productList?.slice(0, 4)?.map?.((product: Product) => (
+            <ProductItem
+              product={product}
+              length={productList?.length}
+              key={product.productId}
+              id={product.productId}
+              name={product.name}
+              price={product.price}
+              discount={product.discount}
+              imageUrl={product.image}
+            />
+          ))}
+        </Grid>
+      </Box>
     </Box>
   );
 };

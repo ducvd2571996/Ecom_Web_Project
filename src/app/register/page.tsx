@@ -75,35 +75,66 @@ export default function RegisterPage() {
     <Box
       sx={{
         display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' }, // Column on xs, row on md and up
         height: '100vh',
       }}
     >
-      <Image
-        src={LoginBanner}
-        alt="Adidas Men Running Sneakers"
-        objectFit="cover"
-        quality={100}
-        style={{
-          width: '70%', // Make the image width responsive
-          height: '100%', // Maintain aspect ratio
-        }}
-      />
       <Box
         sx={{
-          width: '30%',
+          width: { xs: '100%', md: '70%' }, // Banner chiếm 100% trên mobile, 70% trên desktop
+          height: { xs: '30%', md: '100%' }, // Chiều cao thay đổi trên mobile
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Image
+          src={LoginBanner}
+          alt="Adidas Men Running Sneakers"
+          objectFit="cover"
+          quality={100}
+          style={{
+            width: '100%', // Make the image width responsive
+            height: '100%', // Maintain aspect ratio
+          }}
+        />
+      </Box>
+      <Box
+        sx={{
+          width: { md: '30%' }, // 100% on small screens, 30% on larger screens
           p: 4,
           borderRadius: '10px',
           textAlign: 'center',
           ml: { xs: 0, md: 3 },
+          mt: { xs: 3, md: 0 }, // Add margin-top on small screens for spacing
         }}
       >
-        <Typography variant="h4" fontWeight="bold" mb={2}>
-          E-Comm
-        </Typography>
-        <Typography variant="h5" mb={3}>
+        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
+          <Box
+            sx={{
+              backgroundColor: '#58c9f3',
+              borderRadius: '50%',
+              width: 60,
+              height: 60,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mr: 1,
+            }}
+          >
+            <Typography sx={{ color: 'white', fontSize: 20 }}>E</Typography>
+          </Box>
+          <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+            E-Comm
+          </Typography>
+        </Box>
+        <Typography sx={{ fontWeight: 'bold' }} variant="h5" mb={1}>
           Đăng Ký
         </Typography>
 
+        <Typography sx={{ color: 'GrayText' }} mb={3}>
+          Đăng ký để nhận thêm nhiều chương trình khuyến mãi
+        </Typography>
         <TextField
           fullWidth
           label="Số điện thoại"
@@ -144,7 +175,7 @@ export default function RegisterPage() {
           }}
         />
 
-        <Box display="flex" alignItems="center">
+        <Box display="flex" alignItems="center" mb={2}>
           <Checkbox
             checked={isAgree}
             onChange={() => setIsAgree((prev) => !prev)}
@@ -162,7 +193,7 @@ export default function RegisterPage() {
           </Typography>
         </Box>
 
-        <Box display="flex" alignItems="center">
+        <Box display="flex" alignItems="center" mb={3}>
           <Checkbox color="default" />
           <Typography variant="body2">
             Đăng ký nhận bản tin hàng tháng của chúng tôi
@@ -175,7 +206,7 @@ export default function RegisterPage() {
           fullWidth
           color="primary"
           size="large"
-          sx={{ mb: 2, marginTop: 10 }}
+          sx={{ mb: 2, marginTop: 5 }}
           disabled={
             loading ||
             phoneError ||

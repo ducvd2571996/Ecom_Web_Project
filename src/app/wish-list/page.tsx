@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Product } from '@/app/model';
 import ProductItem from '../components/productItem';
 import { getProductListHanlder } from '../product-list/store/reducers/get-product';
-import { getWishList, removeWishList } from './store/reducers/wish-list';
+import { getWishList } from './store/reducers/wish-list';
 
 const WishListPage = () => {
   const dispatch = useDispatch();
@@ -83,7 +83,7 @@ const WishListPage = () => {
         </Box>
         <Box marginX={3}>
           <Grid container spacing={5}>
-            {productList?.map?.((product: Product) => (
+            {productList?.slice(0, 4)?.map?.((product: Product) => (
               <ProductItem
                 product={product}
                 length={productList?.length}
