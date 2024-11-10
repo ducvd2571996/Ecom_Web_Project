@@ -1,92 +1,47 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Button, Grid } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import ProductItem from '../productItem';
-
-const products = [
-  {
-    id: 1,
-    name: 'Nike Air Max 270 React',
-    category: 'Sneakers',
-    price: '1.000.000',
-    oldPrice: '1.700.000',
-    discount: '24% Off',
-    imageUrl: 'https://m.media-amazon.com/images/I/71lRy65QcdL._AC_SY695_.jpg', // Replace with actual image paths
-    rating: 4,
-  },
-  {
-    id: 2,
-    name: 'Designer Bag',
-    category: 'Bags',
-    price: '1.200.000',
-    oldPrice: '1.500.000',
-    discount: '33% Off',
-    imageUrl: 'https://m.media-amazon.com/images/I/71i+rKxv6pL._AC_SY695_.jpg', // Replace with actual image paths
-    rating: 5,
-  },
-  {
-    id: 3,
-    name: 'Nike Air Max 270 React',
-    category: 'Sneakers',
-    price: '1.000.000',
-    oldPrice: '1.700.000',
-    discount: '24% Off',
-    imageUrl: 'https://m.media-amazon.com/images/I/71lRy65QcdL._AC_SY695_.jpg', // Replace with actual image paths
-    rating: 4,
-  },
-  {
-    id: 4,
-    name: 'Designer Bag',
-    category: 'Bags',
-    price: '1.200.000',
-    oldPrice: '1.500.000',
-    discount: '33% Off',
-    imageUrl: 'https://m.media-amazon.com/images/I/71i+rKxv6pL._AC_SY695_.jpg', // Replace with actual image paths
-    rating: 5,
-  },
-  {
-    id: 5,
-    name: 'Nike Air Max 270 React',
-    category: 'Sneakers',
-    price: '1.000.000',
-    oldPrice: '1.700.000',
-    discount: '24% Off',
-    imageUrl: 'https://m.media-amazon.com/images/I/71lRy65QcdL._AC_SY695_.jpg', // Replace with actual image paths
-    rating: 4,
-  },
-  {
-    id: 6,
-    name: 'Designer Bag',
-    category: 'Bags',
-    price: '1.200.000',
-    oldPrice: '1.500.000',
-    discount: '33% Off',
-    imageUrl: 'https://m.media-amazon.com/images/I/71i+rKxv6pL._AC_SY695_.jpg', // Replace with actual image paths
-    rating: 5,
-  },
-  // Add more products for each category
-];
-
-const cate = [
-  { categoryName: 'Tất cả', categoryCode: 'All' },
-  { categoryName: 'Túi xách', categoryCode: 'Bags' },
-  { categoryName: 'Sneakers', categoryCode: 'Sneakers' },
-  { categoryName: 'Dây nịch', categoryCode: 'Belt' },
-  { categoryName: 'Mắt kính', categoryCode: 'Glass' },
-];
+import { getCateListHanlder } from '@/app/store/reducers';
+import { RootState } from '@/app/store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProductListHanlder } from '@/app/product-list/store/reducers/get-product';
 
 const BestSeller = () => {
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState(0);
+  const dispatch = useDispatch();
 
-  const handleTabChange = (category: any) => {
-    setSelectedCategory(category);
+  // Only dispatch once for category list fetching (on mount)
+  const { cateList } = useSelector((state: RootState) => state.cateList);
+
+  const newCateList = useMemo(() => {
+    return [{ id: 0, name: 'Tất cả' }, ...cateList];
+  }, [cateList]);
+
+  useEffect(() => {
+    dispatch(getCateListHanlder());
+  }, [dispatch]); // This effect runs only once on component mount
+
+  const { productList } = useSelector((state: RootState) => state.productList);
+
+  useEffect(() => {
+    if (productList.length === 0) {
+      // Only dispatch if product list is empty
+      dispatch(getProductListHanlder({}));
+    }
+  }, [dispatch, productList.length]); // Run only once when productList is empty
+
+  // Use useMemo to avoid recalculating filtered products on every render
+  const filteredProducts = useMemo(() => {
+    return selectedCategory === 0
+      ? productList
+      : productList.filter(
+          (product) => product?.categoryId === selectedCategory
+        );
+  }, [selectedCategory, productList]); // Only re-filter when selectedCategory or productList changes
+
+  const handleTabChange = (categoryId: number) => {
+    setSelectedCategory(categoryId);
   };
-
-  // Filter products based on the selected category
-  const filteredProducts =
-    selectedCategory === 'All'
-      ? products
-      : products.filter((product) => product.category === selectedCategory);
 
   return (
     <Box sx={{ paddingX: 12, paddingTop: 10 }}>
@@ -98,31 +53,29 @@ const BestSeller = () => {
           marginBottom: 5,
         }}
       >
-        {cate.map((category) => (
+        {newCateList?.map((category) => (
           <Button
-            key={category.categoryCode}
-            variant={
-              selectedCategory === category.categoryCode ? 'contained' : 'text'
-            }
-            onClick={() => handleTabChange(category.categoryCode)}
-            sx={{ mx: 1 }}
+            key={category?.id}
+            variant={selectedCategory === category.id ? 'contained' : 'text'}
+            onClick={() => handleTabChange(category.id)}
+            sx={{ mx: { sm: 1, xs: 0 } }}
           >
-            {category.categoryName}
+            {category.name}
           </Button>
         ))}
       </Box>
 
       {/* Product Grid */}
       <Grid container spacing={5}>
-        {filteredProducts.map((product) => (
+        {filteredProducts?.slice(0, 8)?.map((product) => (
           <ProductItem
-            key={product.id}
-            id={product.id}
+            product={product}
+            key={product.productId}
+            id={product.productId}
             name={product.name}
-            oldPrice={product.oldPrice}
             price={product.price}
             discount={product.discount}
-            imageUrl={product.imageUrl}
+            imageUrl={product.image}
           />
         ))}
       </Grid>

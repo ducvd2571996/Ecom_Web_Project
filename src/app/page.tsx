@@ -1,28 +1,36 @@
 'use client'; // This makes the component a Client Component
-import Banner from '@/app/components/banner/Banner';
-import { Box, Typography } from '@mui/material';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserRequest } from './store/reducers/user';
-import { RootState } from './store/store';
-import BestSeller from '@/app/components/bestSeller';
-import Services from '@/app/components/services';
-import FeaturedProducts from '@/app/components/featureProduct';
 import AdidasBanner from '@/app/components/adidasBanner';
+import Banner from '@/app/components/banner/Banner';
+import BestSeller from '@/app/components/bestSeller';
+import FeaturedProducts from '@/app/components/featureProduct';
+import Services from '@/app/components/services';
+import { Box, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import { useEffect, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
+import { getCartHanlder } from './cart/store/reducers/cart';
+import { fetchUserRequest } from './store/reducers';
 
 export default function Home() {
   const dispatch = useDispatch();
   const router = useRouter();
+
+  const cachedUser = useMemo(() => {
+    const userData = localStorage.getItem('user');
+    return userData ? JSON.parse(userData) : null;
+  }, []);
+
   const gotoProductList = () => {
     router.push('/product-list');
   };
 
-  const { data, loading } = useSelector((state: RootState) => state.user);
-
   useEffect(() => {
-    dispatch(fetchUserRequest());
-  }, [dispatch]);
+    if (cachedUser?.userInfo?.userId) {
+      dispatch(getCartHanlder({ userId: cachedUser?.userInfo?.id }));
+      dispatch(fetchUserRequest(cachedUser?.userInfo?.id));
+    }
+  }, [cachedUser?.userInfo?.userId, dispatch]);
+
   return (
     <Box>
       <Banner />

@@ -1,28 +1,37 @@
 'use client'; // This makes the component a Client Component
+
 import { Box } from '@mui/material';
-
-import BestSeller from '@/app/components/bestSeller';
-import ProductList from '../components/productList';
 import AdidasBanner from '../components/adidasBanner';
+import ProductList from '../components/productList';
 import ProductFilter from '../components/prouductFilter';
-import { Margin } from '@mui/icons-material';
+import { useState } from 'react';
 
-export default function Home() {
+export default function ProductListPage() {
+  const [priceRange, setPriceRange] = useState<number[]>([0, 10000000]);
   return (
-    <Box sx={{ marginTop: 2 }}>
-      <AdidasBanner shoeRatio="30%" height={300} isHideButton />
+    <Box sx={{ marginY: 3 }}>
       <Box
         sx={{
-          display: 'flex',
-          marginTop: 15,
-          marginBottom: 10,
-          paddingRight: 2,
+          display: 'flex', // Default display flex for all devices
+          flexDirection: { xs: 'column', sm: 'row' }, // Column on small devices (xs), row on larger devices (sm and up)
+          paddingRight: { sm: 2 },
         }}
       >
-        <Box width={'40%'} sx={{ marginRight: 2 }}>
-          <ProductFilter />
+        <Box
+          width={{ xs: '100%', sm: '20%' }}
+          sx={{ marginRight: { sm: 2 }, marginTop: 2 }}
+        >
+          <ProductFilter onPriceRangeChange={setPriceRange} />
         </Box>
-        <ProductList />
+
+        <Box
+          width={{ xs: '100%', sm: '75%' }}
+          alignItems={'center'}
+          marginTop={2}
+        >
+          <AdidasBanner shoeRatio="30%" height={300} isHideButton />
+          <ProductList priceRange={priceRange} />
+        </Box>
       </Box>
     </Box>
   );

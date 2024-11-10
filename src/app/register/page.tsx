@@ -1,140 +1,258 @@
-import { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+'use client'; // This makes the component a Client Component
+import { isValidPassword, isValidPhone } from '@/helper/verifyInput';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
-  Typography,
+  Alert,
+  Box,
   Button,
-  TextField,
   Checkbox,
-  FormControlLabel,
-  Stack,
+  IconButton,
+  InputAdornment,
+  Snackbar,
+  TextField,
+  Typography,
 } from '@mui/material';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import LoginBanner from '../public/asset/images/login_banner.png';
+import { RootState } from '../store/store';
+import { registerHanlder } from './store/reducers/register';
 
-const Register = () => {
-  const [email, setEmail] = useState('');
+export default function RegisterPage() {
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState('');
-  const [agreeTerms, setAgreeTerms] = useState(false);
-  const [subscribeNewsletter, setSubscribeNewsletter] = useState(false);
-  const [recaptchaVerified, setRecaptchaVerified] = useState(false);
+  const [error, setError] = useState(false);
+  const [isAgree, setIsAgree] = useState(false);
+  const [phoneError, setPhoneError] = useState(false);
+  const [isSuccess, setRegisterSuccess] = useState(false);
+  const [isFailure, setRegisterFailure] = useState(false);
+  const { loading } = useSelector((state: RootState) => state.register);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (recaptchaVerified && agreeTerms) {
-      console.log('Sign up form submitted:', { email, password, agreeTerms, subscribeNewsletter });
-      // Xử lý đăng ký, có thể gọi API hoặc điều hướng
-    } else {
-      console.log('Please verify reCAPTCHA and agree to the terms.');
-    }
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const gotoLogin = () => {
+    router.push('/login');
+  };
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
+  const handlePasswordChange = (event: any) => {
+    const newPassword = event.target.value;
+    setPassword(newPassword);
+
+    setError(!isValidPassword(newPassword));
+  };
+
+  const handlePhoneNumberChange = (event: any) => {
+    const newPhoneNumber = event.target.value;
+    setPhoneNumber(newPhoneNumber);
+    setPhoneError(!isValidPhone(newPhoneNumber));
+  };
+
+  const handleRegister = () => {
+    dispatch(
+      registerHanlder({
+        user: { phone: phoneNumber, password: password },
+        callback: (res: { status: number }) => {
+          if (res?.status === 200) {
+            setRegisterSuccess(true);
+          } else {
+            setRegisterFailure(true);
+          }
+        },
+      })
+    );
   };
 
   return (
-    <div className="flex items-center justify-between h-screen bg-gray-100">
-      {/* Phần bên trái: Banner */}
-      <div className="w-3/5 h-full bg-blue-500 relative">
-        <img
-          src="Ảnh"
-          alt="Fashion Sale"
-          className="object-cover w-full h-full"
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' }, // Column on xs, row on md and up
+        height: '100vh',
+      }}
+    >
+      <Box
+        sx={{
+          width: { xs: '100%', md: '70%' }, // Banner chiếm 100% trên mobile, 70% trên desktop
+          height: { xs: '30%', md: '100%' }, // Chiều cao thay đổi trên mobile
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Image
+          src={LoginBanner}
+          alt="Adidas Men Running Sneakers"
+          objectFit="cover"
+          quality={100}
+          style={{
+            width: '100%', // Make the image width responsive
+            height: '100%', // Maintain aspect ratio
+          }}
         />
-      </div>
-
-      {/* Phần bên phải: Form đăng ký */}
-      <div className="w-2/5 bg-white p-8 flex items-center justify-center">
-        <div className="max-w-md w-full">
-          <Typography variant="h4" component="h1" align="center" gutterBottom>
-            Đăng Ký
+      </Box>
+      <Box
+        sx={{
+          width: { md: '30%' }, // 100% on small screens, 30% on larger screens
+          p: 4,
+          borderRadius: '10px',
+          textAlign: 'center',
+          ml: { xs: 0, md: 3 },
+          mt: { xs: 3, md: 0 }, // Add margin-top on small screens for spacing
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
+          <Box
+            sx={{
+              backgroundColor: '#58c9f3',
+              borderRadius: '50%',
+              width: 60,
+              height: 60,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mr: 1,
+            }}
+          >
+            <Typography sx={{ color: 'white', fontSize: 20 }}>E</Typography>
+          </Box>
+          <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+            E-Comm
           </Typography>
-          <Typography variant="body1" align="center" color="textSecondary" paragraph>
-            Đăng ký miễn phí để truy cập các sản phẩm của chúng tôi
-          </Typography>
+        </Box>
+        <Typography sx={{ fontWeight: 'bold' }} variant="h5" mb={1}>
+          Đăng Ký
+        </Typography>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email input */}
-            <TextField
-              label="Địa chỉ Email"
-              variant="outlined"
-              fullWidth
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+        <Typography sx={{ color: 'GrayText' }} mb={3}>
+          Đăng ký để nhận thêm nhiều chương trình khuyến mãi
+        </Typography>
+        <TextField
+          fullWidth
+          label="Số điện thoại"
+          variant="outlined"
+          margin="normal"
+          value={phoneNumber}
+          onChange={handlePhoneNumberChange}
+          error={phoneError}
+          helperText={phoneError ? 'Số điện thoại không đúng' : ''}
+          inputProps={{
+            inputMode: 'numeric',
+            pattern: '[0-9]*',
+          }}
+        />
 
-            {/* Password input */}
-            <TextField
-              label="Mật khẩu"
-              type="password"
-              variant="outlined"
-              fullWidth
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              helperText="Sử dụng 8 ký tự trở lên với sự kết hợp của chữ cái, số & ký tự đặc biệt."
-            />
+        <TextField
+          fullWidth
+          label="Nhập mật khẩu"
+          type={showPassword ? 'text' : 'password'}
+          variant="outlined"
+          margin="normal"
+          value={password}
+          onChange={handlePasswordChange}
+          error={error}
+          helperText={
+            error
+              ? 'Mật khẩu từ 8 ký tự trở lên bao gồm chữ hoa, ký tự đặc biệt và số'
+              : ''
+          }
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={handleTogglePasswordVisibility} edge="end">
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
 
-            {/* Agree terms checkbox */}
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={agreeTerms}
-                  onChange={() => setAgreeTerms(!agreeTerms)}
-                  required
-                />
-              }
-              label={
-                <span>
-                  Tôi đồng ý với <a href="#" style={{ color: '#1976d2' }}>Điều khoản sử dụng</a> và <a href="#" style={{ color: '#1976d2' }}>Chính sách bảo mật</a>
-                </span>
-              }
-            />
-
-            {/* Newsletter subscription checkbox */}
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={subscribeNewsletter}
-                  onChange={() => setSubscribeNewsletter(!subscribeNewsletter)}
-                />
-              }
-              label="Đăng ký nhận bản tin hàng tháng"
-            />
-
-            {/* reCAPTCHA (giả lập) */}
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={recaptchaVerified}
-                  onChange={() => setRecaptchaVerified(!recaptchaVerified)}
-                />
-              }
-              label="Tôi không phải là robot"
-            />
-
-            {/* Nút đăng ký */}
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-            >
-              Đăng Ký
-            </Button>
-          </form>
-
-          {/* Đăng nhập */}
-          <div className="text-center mt-4">
-            <Typography variant="body2">
-              Đã có tài khoản? <a href="#" style={{ color: '#1976d2' }}>Đăng Nhập</a>
+        <Box display="flex" alignItems="center" mb={2}>
+          <Checkbox
+            checked={isAgree}
+            onChange={() => setIsAgree((prev) => !prev)}
+            color="default"
+          />
+          <Typography variant="body2">
+            Đồng ý với{' '}
+            <Typography variant="body2" color="primary" component="a" href="#">
+              điều khoản sử dụng{' '}
             </Typography>
-          </div>
+            và{' '}
+            <Typography variant="body2" color="primary" component="a" href="#">
+              chính sách bảo mật
+            </Typography>
+          </Typography>
+        </Box>
 
-          {/* Nút đăng nhập với Google */}
-          <div className="mt-4 flex items-center justify-center">
-            <Button variant="outlined" startIcon={<img src="/path_to_google_icon/google.svg" alt="Google Icon" className="h-5 w-5" />}>
-              Hoặc đăng nhập bằng Google
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
+        <Box display="flex" alignItems="center" mb={3}>
+          <Checkbox color="default" />
+          <Typography variant="body2">
+            Đăng ký nhận bản tin hàng tháng của chúng tôi
+          </Typography>
+        </Box>
+
+        <Button
+          onClick={handleRegister}
+          variant="contained"
+          fullWidth
+          color="primary"
+          size="large"
+          sx={{ mb: 2, marginTop: 5 }}
+          disabled={
+            loading ||
+            phoneError ||
+            error ||
+            phoneNumber === '' ||
+            password === '' ||
+            !isAgree
+          }
+        >
+          {loading ? 'Đang đăng ký...' : 'Đăng Ký'}
+        </Button>
+
+        <Typography variant="body2" mt={2}>
+          Bạn đã có tài khoản?{' '}
+          <Typography
+            onClick={gotoLogin}
+            component="a"
+            color="primary"
+            href="#"
+            fontWeight="bold"
+          >
+            Đăng nhập
+          </Typography>
+        </Typography>
+        <Snackbar
+          open={isSuccess}
+          autoHideDuration={2000}
+          onClose={() => setRegisterSuccess(false)}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert onClose={() => setRegisterSuccess(false)} severity="success">
+            Đăng ký thành công!
+          </Alert>
+        </Snackbar>
+
+        <Snackbar
+          open={isFailure}
+          autoHideDuration={2000}
+          onClose={() => setRegisterFailure(false)}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert onClose={() => setRegisterFailure(false)} severity="error">
+            Số điện thoại đã tồn tại. Đăng ký thất bại!
+          </Alert>
+        </Snackbar>
+      </Box>
+    </Box>
   );
-};
-
-export default Register;
+}

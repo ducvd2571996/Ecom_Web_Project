@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Card,
   CardMedia,
@@ -7,43 +8,147 @@ import {
   Box,
   IconButton,
   Tooltip,
+  Rating,
 } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import VisibilityIcon from '@mui/icons-material/Visibility'; // Import the Visibility icon
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import { formatPrice } from '@/helper/formatString/format-price';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  createCartHanlder,
+  updateCartHanlder,
+  getCartHanlder,
+} from '@/app/cart/store/reducers/cart';
+import { CreateCartDTO } from '@/app/model/cart.model';
+import {
+  getWishList,
+  updateWishList,
+} from '@/app/wish-list/store/reducers/wish-list';
+import { RootState } from '@/app/store/store';
+import { Product } from '@/app/model';
 
 interface ProductItemProps {
   id: number;
   name: string;
-  oldPrice: string;
-  price: string;
-  discount: string;
+  price: number;
+  discount: number;
   imageUrl: string;
+  rating?: number; // Thêm thuộc tính rating
+  ratingCount?: number; // Thêm thuộc tính ratingCount
+  length?: number;
+  product: Product;
 }
 
 const ProductItem = ({
   id,
   name,
-  oldPrice,
   price,
   discount,
   imageUrl,
+  product,
 }: ProductItemProps) => {
   const router = useRouter();
   const [hovered, setHovered] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const dispatch = useDispatch();
+  const [rating, setRating] = useState<number | null>(null); // Thay giá trị mặc định là null để khi render lại sẽ lấy từ storage
+
+  useEffect(() => {
+    // Kiểm tra xem rating đã được lưu trong localStorage chưa
+    const storedRating = localStorage.getItem(`rating-${id}`);
+    if (storedRating) {
+      setRating(Number(storedRating)); // Nếu có, đặt giá trị rating từ localStorage
+    }
+  }, [id]);
+  const { wishList } = useSelector((state: RootState) => state.wishList);
+  const isInWishList = wishList?.find((product) => product?.productId === id);
+  const cachedUser = useMemo(() => {
+    const userData = localStorage.getItem('user');
+    return userData ? JSON.parse(userData) : null;
+  }, []);
 
   const handleFavoriteToggle = () => {
-    setIsFavorite((prev) => !prev);
+    if (cachedUser?.userInfo) {
+      dispatch(updateWishList(product));
+    } else {
+      const url = `/login`;
+      router.push(url);
+    }
   };
 
+  useEffect(() => {
+    dispatch(getWishList());
+  }, [wishList?.length]);
+
   const onNavigateDetail = () => {
-    const url = `/product-detail?link=${imageUrl}`;
+    const url = `/product-detail?id=${id}`;
     router.push(url);
   };
+
+  const onHandleAddToCart = () => {
+    if (cachedUser?.userInfo) {
+      const userId = cachedUser?.userInfo?.id;
+      if (userId) {
+        const product = {
+          id,
+          name,
+          image: imageUrl,
+          tax: 0,
+          discount,
+          price,
+          quantity: 1,
+          note: '',
+        };
+        const cart: CreateCartDTO = {
+          products: [product],
+          customerId: userId,
+          isAddToCart: true,
+        };
+        dispatch(
+          getCartHanlder({
+            userId,
+            callback: (rs: any) => {
+              if (rs?.data) {
+                dispatch(
+                  updateCartHanlder({
+                    cart,
+                  })
+                );
+              } else {
+                dispatch(
+                  createCartHanlder({
+                    cart,
+                  })
+                );
+              }
+            },
+          })
+        );
+      }
+    } else {
+      const url = `/login`;
+      router.push(url);
+    }
+  };
+
+  // Hàm xử lý khi người dùng thay đổi rating
+  const handleRatingChange = (
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+    event: React.ChangeEvent<{}>,
+    newRating: number | null
+  ) => {
+    if (newRating !== null) {
+      setRating(newRating);
+      // Lưu rating vào localStorage để duy trì giá trị khi người dùng quay lại
+      localStorage.setItem(`rating-${id}`, String(newRating));
+    }
+  };
+
+  const discountPrice = price - Math.round((price * discount) / 100);
+  const isHaveDiscount = discount && discount !== 0;
 
   return (
     <Grid item xs={12} sm={6} md={3} key={id}>
@@ -63,60 +168,36 @@ const ProductItem = ({
             component="img"
             sx={{
               width: '100%',
-              height: 'auto',
+              height: 100,
               objectFit: 'contain',
+              cursor: 'pointer',
             }}
             image={imageUrl}
             alt={name}
+            onClick={onNavigateDetail} // Gọi hàm khi click vào hình ảnh
           />
         </Box>
 
-        <CardContent style={{ alignItems: 'center' }}>
-          <Typography gutterBottom variant="h6" component="div">
-            {name}
-          </Typography>
-          <Typography variant="body2" color="#40BFFF">
-            đ{price}
-            <Typography
-              color="#9098B1"
-              variant="body2"
-              component="span"
-              sx={{ textDecoration: 'line-through', marginLeft: 1 }}
-            >
-              đ{oldPrice}
-            </Typography>
-            <Typography
-              color="#FB7181"
-              variant="body2"
-              component="span"
-              fontWeight={'700'}
-              sx={{ marginLeft: 1 }}
-            >
-              ({discount})
-            </Typography>
-          </Typography>
-        </CardContent>
-
-        {/* Icons container */}
+        {/* Hiệu ứng hover xung quanh ảnh */}
         {hovered && (
           <Box
             sx={{
               position: 'absolute',
-              top: '50%',
+              top: '33%',
               left: '50%',
               display: 'flex',
               backgroundColor: '#F1F3F4',
               width: '80%',
-              height: '80%',
+              height: '50%',
               gap: 1,
               transform: 'translate(-50%, -50%)',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Tooltip title={isFavorite ? 'Bỏ thích' : 'Yêu thích'}>
+            <Tooltip title={isInWishList ? 'Bỏ thích' : 'Yêu thích'}>
               <IconButton onClick={handleFavoriteToggle}>
-                {isFavorite ? (
+                {isInWishList ? (
                   <FavoriteIcon color="error" />
                 ) : (
                   <FavoriteBorderIcon sx={{ color: '#33A0FF' }} />
@@ -124,7 +205,7 @@ const ProductItem = ({
               </IconButton>
             </Tooltip>
             <Tooltip title="Thêm giỏ hàng">
-              <IconButton sx={{ color: '#40BFFF' }}>
+              <IconButton onClick={onHandleAddToCart} sx={{ color: '#40BFFF' }}>
                 <ShoppingCartIcon />
               </IconButton>
             </Tooltip>
@@ -135,6 +216,66 @@ const ProductItem = ({
             </Tooltip>
           </Box>
         )}
+
+        <CardContent style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <Typography
+            textAlign={'center'}
+            gutterBottom
+            variant="h6"
+            component="div"
+            sx={{
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              WebkitLineClamp: 1,
+            }}
+          >
+            {name}
+          </Typography>
+
+          {/* Icons container */}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              marginY: 1,
+              justifyContent: 'center',
+            }}
+          >
+            <Rating
+              name="product-rating"
+              value={rating || 5} // Hiển thị giá trị rating đã lưu hoặc mặc định là 5
+              precision={0.5}
+              onChange={handleRatingChange}
+              sx={{ fontSize: 16 }} // Thay đổi kích thước của các sao
+            />
+          </Box>
+
+          <Typography textAlign={'center'} variant="body2" color="#40BFFF">
+            đ{formatPrice(isHaveDiscount ? discountPrice : price)}
+            {isHaveDiscount ? (
+              <>
+                <Typography
+                  color="#9098B1"
+                  variant="body2"
+                  component="span"
+                  sx={{ textDecoration: 'line-through', marginLeft: 1 }}
+                >
+                  đ{formatPrice(price)}
+                </Typography>
+                <Typography
+                  color="#FB7181"
+                  variant="body2"
+                  component="span"
+                  fontWeight={'700'}
+                  sx={{ marginLeft: 1 }}
+                >
+                  {discount}%Off
+                </Typography>
+              </>
+            ) : null}
+          </Typography>
+        </CardContent>
       </Card>
     </Grid>
   );

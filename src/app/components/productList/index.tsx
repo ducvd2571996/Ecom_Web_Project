@@ -1,103 +1,108 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Button, Grid } from '@mui/material';
-import { useState } from 'react';
+import { RootState } from '@/app/store/store';
+import { Box, Grid, Typography } from '@mui/material';
+import { useEffect, useState, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProductListHanlder } from '../../product-list/store/reducers/get-product';
 import ProductItem from '../productItem';
-import AdidasBanner from '../adidasBanner';
+import ViewCompactSharpIcon from '@mui/icons-material/ViewCompactSharp';
+import { Product } from '@/app/model';
 
-const products = [
-  {
-    id: 1,
-    name: 'Nike Air Max 270 React',
-    category: 'Sneakers',
-    price: '1.000.000',
-    oldPrice: '1.700.000',
-    discount: '24% Off',
-    imageUrl: 'https://m.media-amazon.com/images/I/71lRy65QcdL._AC_SY695_.jpg', // Replace with actual image paths
-    rating: 4,
-  },
-  {
-    id: 2,
-    name: 'Designer Bag',
-    category: 'Bags',
-    price: '1.200.000',
-    oldPrice: '1.500.000',
-    discount: '33% Off',
-    imageUrl: 'https://m.media-amazon.com/images/I/71i+rKxv6pL._AC_SY695_.jpg', // Replace with actual image paths
-    rating: 5,
-  },
-  {
-    id: 3,
-    name: 'Nike Air Max 270 React',
-    category: 'Sneakers',
-    price: '1.000.000',
-    oldPrice: '1.700.000',
-    discount: '24% Off',
-    imageUrl: 'https://m.media-amazon.com/images/I/71lRy65QcdL._AC_SY695_.jpg', // Replace with actual image paths
-    rating: 4,
-  },
-  {
-    id: 4,
-    name: 'Designer Bag',
-    category: 'Bags',
-    price: '1.200.000',
-    oldPrice: '1.500.000',
-    discount: '33% Off',
-    imageUrl: 'https://m.media-amazon.com/images/I/71i+rKxv6pL._AC_SY695_.jpg', // Replace with actual image paths
-    rating: 5,
-  },
-  {
-    id: 5,
-    name: 'Nike Air Max 270 React',
-    category: 'Sneakers',
-    price: '1.000.000',
-    oldPrice: '1.700.000',
-    discount: '24% Off',
-    imageUrl: 'https://m.media-amazon.com/images/I/71lRy65QcdL._AC_SY695_.jpg', // Replace with actual image paths
-    rating: 4,
-  },
-  {
-    id: 6,
-    name: 'Designer Bag',
-    category: 'Bags',
-    price: '1.200.000',
-    oldPrice: '1.500.000',
-    discount: '33% Off',
-    imageUrl: 'https://m.media-amazon.com/images/I/71i+rKxv6pL._AC_SY695_.jpg', // Replace with actual image paths
-    rating: 5,
-  },
-  // Add more products for each category
-];
+interface ProductListProps {
+  priceRange: number[];
+}
 
-const Brand = [
-  { categoryName: 'Tất cả', categoryCode: 'All' },
-  { categoryName: 'Túi xách', categoryCode: 'Bags' },
-  { categoryName: 'Sneakers', categoryCode: 'Sneakers' },
-  { categoryName: 'Dây nịch', categoryCode: 'Belt' },
-  { categoryName: 'Mắt kính', categoryCode: 'Glass' },
-];
+const ProductList = ({ priceRange }: ProductListProps) => {
+  const dispatch = useDispatch();
+  const [sortBy, setSortBy] = useState<string>('name');
+  const { productList, loading } = useSelector(
+    (state: RootState) => state.productList
+  );
 
-const ProductList = () => {
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  useEffect(() => {
+    dispatch(getProductListHanlder({}));
+  }, [dispatch]);
 
-  // Filter products based on the selected category
-  const filteredProducts =
-    selectedCategory === 'All'
-      ? products
-      : products.filter((product) => product.category === selectedCategory);
+  const filteredProducts = useMemo(() => {
+    const filtered = productList.filter(
+      (product) =>
+        product.price >= priceRange[0] && product.price <= priceRange[1]
+    );
+
+    switch (sortBy) {
+      case 'desc-price':
+        return filtered.sort((a, b) => b.price - a.price);
+      case 'asc-price':
+        return filtered.sort((a, b) => a.price - b.price);
+      case 'name':
+        return filtered.sort((a, b) => a.name.localeCompare(b.name));
+      case 'discount':
+        return filtered.sort((a, b) => b.discount - a.discount);
+      default:
+        return filtered;
+    }
+  }, [productList, priceRange, sortBy]);
+
+  if (loading) return <p>Đang tải...</p>;
 
   return (
     <Box>
-      {/* Product Grid */}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '10px',
+          marginTop: 5,
+          marginBottom: 5,
+          paddingRight: 2,
+          backgroundColor: '#f7f7f7',
+          borderRadius: '8px',
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography style={{ marginRight: '10px', fontWeight: 'bold' }}>
+            Sắp xếp theo
+          </Typography>
+          <select
+            style={{
+              padding: '5px',
+              borderRadius: '4px',
+              borderColor: '#ccc',
+            }}
+            onChange={(e) => setSortBy(e.target.value)}
+            value={sortBy}
+          >
+            <option value="name">Tên</option>
+            <option value="asc-price">Giá (Tăng dần)</option>
+            <option value="desc-price">Giá (Giảm dần)</option>
+            <option value="discount">Giảm giá</option>
+          </select>
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography marginRight={1}>
+            {productList?.length} sản phẩm
+          </Typography>
+          <ViewCompactSharpIcon
+            sx={{
+              width: '20px',
+              height: '20px',
+              color: '#0099ff',
+              cursor: 'pointer',
+            }}
+          />
+        </Box>
+      </Box>
       <Grid container spacing={5}>
-        {filteredProducts.map((product) => (
+        {filteredProducts.map((product: Product) => (
           <ProductItem
-            key={product.id}
-            id={product.id}
+            product={product}
+            length={productList?.length}
+            key={product.productId}
+            id={product.productId}
             name={product.name}
-            oldPrice={product.oldPrice}
             price={product.price}
             discount={product.discount}
-            imageUrl={product.imageUrl}
+            imageUrl={product.image}
           />
         ))}
       </Grid>
